@@ -8,13 +8,16 @@
 
 import Foundation
 
-public protocol Webserivce {
+@available(*, deprecated, message: "use Webservice")
+public typealias Webserivce = Webservice
+
+public protocol Webservice {
     associatedtype Method: WebserviceRequest
     var servicePath: String { get }
     var caller: WebserviceCaller { get }
 }
 
-extension Webserivce {
+extension Webservice {
 
     public func send<T: Decodable>(method: Method, headers: [String: String]?, completion: @escaping (Result<T, Error>) -> Void) {
 

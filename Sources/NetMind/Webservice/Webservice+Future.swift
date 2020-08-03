@@ -10,7 +10,7 @@ import Foundation
 #if canImport(CoreMind)
 import CoreMind
 
-extension Webserivce {
+extension Webservice {
 
     public func send(method: Method, headers: [String: String]) -> Future<WebserviceResponse> {
         return Future<WebserviceResponse> {
