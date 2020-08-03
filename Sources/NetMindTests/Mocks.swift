@@ -100,7 +100,7 @@ enum MockUserRequest: WebserviceRequest {
     }
 }
 
-final class MockUsersWebservice: Webserivce {
+final class MockUsersWebservice: Webservice {
     typealias Method = MockUserRequest
     let servicePath = "users"
     let caller: WebserviceCaller = MockWebserviceCaller() // usually injected
