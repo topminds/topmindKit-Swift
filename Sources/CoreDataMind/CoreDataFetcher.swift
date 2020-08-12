@@ -75,6 +75,10 @@ public struct CoreDataFetcher<T: NSManagedObject> {
         return all(configuration: configuration(predicate: nil, sortDescriptors: sortDescriptors))
     }
 
+    public func all<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject) -> CollectionResult {
+        all(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value)
+    }
+    
     public func all(attribute: String, value: AnyObject) -> CollectionResult {
         let predicate = NSPredicate(attribute: attribute, value: value, operation: .equal)
         return all(configuration: configuration(predicate: predicate))
@@ -93,6 +97,10 @@ public struct CoreDataFetcher<T: NSManagedObject> {
         all(configuration: configuration(predicate: nil, sortDescriptors: sortDescriptors), completion: completion)
     }
 
+    public func all<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject, completion: @escaping CollectionCompletion) {
+        all(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value, completion: completion)
+    }
+    
     public func all(attribute: String, value: AnyObject, completion: @escaping CollectionCompletion) {
         let predicate = NSPredicate(attribute: attribute, value: value, operation: .equal)
         let config = configuration(predicate: predicate)
@@ -107,20 +115,32 @@ public struct CoreDataFetcher<T: NSManagedObject> {
 
 
     // MARK: - First
+    public func first<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject) -> EntityResult {
+        first(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value)
+    }
+    
     public func first(attribute: String, value: AnyObject) -> EntityResult {
-        return extractFirst(all(attribute: attribute, value: value))
+        extractFirst(all(attribute: attribute, value: value))
     }
 
     public func first(configuration config: RequestConfig) -> EntityResult {
-        return extractFirst(all(configuration: config))
+        extractFirst(all(configuration: config))
     }
 
+    public func first<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject, completion: @escaping EntityCompletion) {
+        first(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value, completion: completion)
+    }
+    
     public func first(attribute: String, value: AnyObject, completion: @escaping EntityCompletion) {
         all(attribute: attribute, value: value) {
             completion(self.extractFirst($0))
         }
     }
 
+    public func firstOrCreate<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject, builder: BuilderCallback? = nil) -> EntityResult {
+        firstOrCreate(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value, builder: builder)
+    }
+    
     public func firstOrCreate(attribute: String, value: AnyObject, builder: BuilderCallback? = nil) -> EntityResult {
         let predicate = NSPredicate(attribute: attribute, value: value, operation: .equal)
         return firstOrCreate(configuration: configuration(predicate: predicate), builder: builder)
