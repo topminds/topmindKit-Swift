@@ -59,14 +59,33 @@ class CoreDataFetcherTests: CoreDataTests {
         let result = sut.first(attribute: "name", value: "Tom" as AnyObject)
         XCTAssertEqual(unwrapEntityResult(result), tom)
     }
+    
+    func testFindByKeypath() {
+        let result = sut.first(keyPath: \.name, value: "Tom" as AnyObject)
+        XCTAssertEqual(unwrapEntityResult(result), tom)
+    }
 
     func testFindFirstByAttributeFinding() {
         let result = sut.firstOrCreate(attribute: "name", value: "Tom" as AnyObject)
         XCTAssertEqual(unwrapEntityResult(result), tom)
     }
+    
+    func testFindFirstByKeypathFinding() {
+        let result = sut.firstOrCreate(keyPath: \.name, value: "Tom" as AnyObject)
+        XCTAssertEqual(unwrapEntityResult(result), tom)
+    }
 
     func testFindFirstByAttributeCreating() {
         let result = sut.firstOrCreate(attribute: "name", value: "Soft Kitty" as AnyObject) {
+            $0.name = "Soft Kitty"
+        }
+        let kitty = unwrapEntityResult(result)
+
+        XCTAssertEqual(kitty!.name, "Soft Kitty")
+    }
+    
+    func testFindFirstByKeypathCreating() {
+        let result = sut.firstOrCreate(keyPath: \.name, value: "Soft Kitty" as AnyObject) {
             $0.name = "Soft Kitty"
         }
         let kitty = unwrapEntityResult(result)
@@ -88,6 +107,13 @@ class CoreDataFetcherTests: CoreDataTests {
     func testAllByAttribute() {
         _ = sut.create { $0.name = "Tom" }
         let result = sut.all(attribute: "name", value: "Tom" as AnyObject)
+        let kittenNames = unwrapCollectionResult(result).map { $0.name }
+        XCTAssertEqual(["Tom", "Tom"], kittenNames)
+    }
+    
+    func testAllByKeypath() {
+        _ = sut.create { $0.name = "Tom" }
+        let result = sut.all(keyPath: \.name, value: "Tom" as AnyObject)
         let kittenNames = unwrapCollectionResult(result).map { $0.name }
         XCTAssertEqual(["Tom", "Tom"], kittenNames)
     }
