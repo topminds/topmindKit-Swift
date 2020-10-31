@@ -1,8 +1,6 @@
 //
-//  Webservice+Future.swift
-//  NetMind
-//
-//  Created by Martin Gratzer on 04.03.19.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 import Foundation

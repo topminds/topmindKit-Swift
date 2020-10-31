@@ -1,9 +1,6 @@
 //
-//  ChildControllerEmbeddable.swift
-//  topmindKit
-//
-//  Created by Denis Andrašec on 24.07.17.
-//  Copyright © 2017 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 #if os(iOS)

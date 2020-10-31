@@ -1,8 +1,6 @@
 //
-//  File.swift
-//  
-//
-//  Created by Martin Gratzer on 22.08.19.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 import Foundation

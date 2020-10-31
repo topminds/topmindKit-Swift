@@ -1,14 +1,9 @@
 //
-//  DistanceFormatter.swift
-//  topmindKit
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
-//  Created by Martin Gratzer on 23/10/2016.
-//  Copyright © 2016 topmind mobile app solutions. All rights reserved.
-//
-
 import Foundation
 
-// TODO: move to LocationMind
 public final class DistanceFormatter: NumberFormatter {
     
     private static let metersPerMile = 1609.344

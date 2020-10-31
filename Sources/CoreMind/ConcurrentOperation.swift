@@ -1,11 +1,7 @@
 //
-//  ConcurrentOperation.swift
-//  topmindKit
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
-//  Created by Martin Gratzer on 17/03/2017.
-//  Copyright © 2017 topmind mobile app solutions. All rights reserved.
-//
-
 import Foundation
 
 open class ConcurrentOperation: Operation {
