@@ -78,17 +78,20 @@ final class RestResourceRequestTests: XCTestCase {
                                                  file: String = #file,
                                                  line: UInt = #line) {
 
+        let sourceCodeLocation = XCTSourceCodeLocation(filePath: file, lineNumber: Int(line))
+        let sourceCodeContext = XCTSourceCodeContext(location: sourceCodeLocation)
+
         if a.isEmpty && b.isEmpty {
             return
         }
 
         if a.keys.count != b.keys.count {
-            recordFailure(withDescription: "a.keys != b.keys", inFile: file, atLine: Int(line), expected: false)
+            record(.init(type: .assertionFailure, compactDescription: "a.keys != b.keys", detailedDescription: nil, sourceCodeContext: sourceCodeContext, associatedError: nil, attachments: []))
             return
         }
 
         if a.keys.sorted() != b.keys.sorted() {
-            recordFailure(withDescription: "a.keys != b.keys", inFile: file, atLine: Int(line), expected: false)
+            record(.init(type: .assertionFailure, compactDescription: "a.keys.sorted() != b.keys.sorted()", detailedDescription: nil, sourceCodeContext: sourceCodeContext, associatedError: nil, attachments: []))
             return
         }
 
@@ -96,7 +99,7 @@ final class RestResourceRequestTests: XCTestCase {
         let bValues = (b.compactMap { $0.value as? String })
 
         if aValues != bValues {
-            recordFailure(withDescription: "a.values != b.value", inFile: file, atLine: Int(line), expected: false)
+            record(.init(type: .assertionFailure, compactDescription: "a.values != b.value", detailedDescription: nil, sourceCodeContext: sourceCodeContext, associatedError: nil, attachments: []))
             return
         }
     }
