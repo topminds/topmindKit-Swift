@@ -6,7 +6,6 @@
 //  Copyright © 2016 topmind mobile app solutions. All rights reserved.
 //
 
-
 import Foundation
 
 /// Boxing type to provide weak containers

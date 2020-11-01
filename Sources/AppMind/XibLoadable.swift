@@ -12,7 +12,7 @@ public protocol XibLoadable {
 
 extension XibLoadable {
 
-    public static func loadXib(owner: AnyObject? = nil, bundle: Bundle = Bundle.main, builder: ((Self) -> ())? = nil) -> Self {
+    public static func loadXib(owner: AnyObject? = nil, bundle: Bundle = Bundle.main, builder: ((Self) -> Void)? = nil) -> Self {
         guard let nib = bundle.loadNibNamed(xibName, owner: owner, options: nil)?.first as? Self else {
             fatalError("Unexpected Logic Error. \(xibName) not found.")
         }
@@ -35,7 +35,7 @@ extension UITableView {
         where T: UITableViewCell {
             register(cell, forCellReuseIdentifier: cell.cellIdentifier)
     }
-    
+
     public func dequeueCell<T: PrototypeCell>(for indexPath: IndexPath) -> T?
         where T: UITableViewCell {
             return dequeueReusableCell(withIdentifier: T.cellIdentifier, for: indexPath) as? T
@@ -45,39 +45,39 @@ extension UITableView {
         where T: UITableViewCell {
             register(xibLoadable.nib(bundle: bundle), forCellReuseIdentifier: xibLoadable.xibName)
     }
-    
+
     public func dequeueCell<T: XibLoadable>(for indexPath: IndexPath) -> T?
         where T: UITableViewCell {
             return dequeueReusableCell(withIdentifier: T.xibName, for: indexPath) as? T
     }
 }
-    
+
 extension UICollectionView {
     public func register<T: PrototypeCell>(cell: T.Type)
         where T: UICollectionViewCell {
             register(cell, forCellWithReuseIdentifier: cell.cellIdentifier)
     }
-    
+
     public func dequeueCell<T: PrototypeCell>(for indexPath: IndexPath) -> T?
         where T: UICollectionViewCell {
             return dequeueReusableCell(withReuseIdentifier: T.cellIdentifier, for: indexPath) as? T
     }
-    
+
     public func registerCell<T: XibLoadable>(xibLoadable: T.Type, bundle: Bundle? = nil)
         where T: UICollectionViewCell {
             register(xibLoadable.nib(bundle: bundle), forCellWithReuseIdentifier: xibLoadable.xibName)
     }
-    
+
     public func dequeueCell<T: XibLoadable>(for indexPath: IndexPath) -> T?
         where T: UICollectionViewCell {
             return dequeueReusableCell(withReuseIdentifier: T.xibName, for: indexPath) as? T
     }
-    
+
     public func registerSupplementaryView<T: XibLoadable>(xibLoadable: T.Type, kind: String, bundle: Bundle? = nil)
         where T: UICollectionReusableView {
             register(xibLoadable.nib(bundle: bundle), forSupplementaryViewOfKind: kind, withReuseIdentifier: xibLoadable.xibName)
     }
-    
+
     public func dequeueSupplementaryView<T: XibLoadable>(ofKind kind: String, for indexPath: IndexPath) -> T?
         where T: UICollectionReusableView {
             return dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: T.xibName, for: indexPath) as? T

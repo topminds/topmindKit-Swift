@@ -8,7 +8,7 @@ import Foundation
 public enum ResultQueue {
     case any, main, specific(DispatchQueue)
 
-    public func execute(block: @escaping () -> ()) {
+    public func execute(block: @escaping () -> Void) {
         guard let queue = self.queue else {
             block()
             return
@@ -34,14 +34,14 @@ public enum ResultQueue {
 /// The calculated result is cached for later access
 public final class Future<T> {
 
-    private var disposable: Any? = nil
+    private var disposable: Any?
     private let resultQueue: ResultQueue
     private var data: Atomic<Data<T>> = Atomic(Data())
 
     public convenience init(resultQueue: ResultQueue = .any, value: T) {
         self.init(resultQueue: resultQueue, result: .success(value))
     }
-    
+
     public convenience init(resultQueue: ResultQueue = .any, error: Error) {
         self.init(resultQueue: resultQueue, result: .failure(error))
     }
@@ -90,7 +90,7 @@ public final class Future<T> {
             }
         }
     }
-    
+
     public func onResult(callback: @escaping (Swift.Result<T, Error>) -> Void) {
 
         guard let cached = data.value.cached else {
@@ -133,7 +133,7 @@ public final class Future<T> {
             }
         }
     }
-    
+
     /// Intercept errors in a pipeline of futures
     public func catchError(_ handleError: @escaping (Error) -> Void) -> Future<T> {
         return Future<T> { promise in
@@ -155,7 +155,7 @@ public final class Future<T> {
             }
         }
     }
-    
+
     private func notifyQueued(_ value: Swift.Result<T, Error>) {
         assert(data.value.cached == nil, "Don't call notify twice")
 
@@ -180,6 +180,6 @@ public final class Future<T> {
 extension Future {
     fileprivate final class Data<T> {
         var queuedCallbacks: [(Swift.Result<T, Error>) -> Void] = []
-        var cached: Swift.Result<T, Error>? = nil
+        var cached: Swift.Result<T, Error>?
     }
 }

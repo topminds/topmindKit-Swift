@@ -17,7 +17,7 @@ extension String: Error { }
 // @available(*, deprecated, message: "Please use `Swift.Result`")
 public typealias Result<T> = Swift.Result<T, Error>
 
-// Mark: - Non throwing values
+// MARK: - Non throwing values
 extension Swift.Result {
     /// Unwraps a Result without throwing
     ///
@@ -52,16 +52,16 @@ extension Swift.Result {
 
         case .failure(let error):
             throw error
-            
+
         }
     }
-    
+
     // MARK: - Double Null
-    
+
     public init?(_ valueOrNil: Success?, _ errorOrNil: Failure?) {
         if let error = errorOrNil {
             self = .failure(error)
-            
+
             if let value = valueOrNil {
                 logError("Result's value\(value) and error(\(error)) is set")
             }
@@ -71,7 +71,7 @@ extension Swift.Result {
             return nil
         }
     }
-    
+
     public func mapThrowing<U>(_ f: (Success) throws -> U) -> Swift.Result<U, Error> {
         switch self {
         case .success(let result):

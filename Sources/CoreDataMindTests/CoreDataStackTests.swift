@@ -14,20 +14,19 @@ class CoreDataStackTests: XCTestCase {
         return Bundle(for: CoreDataTests.self).url(forResource: "Model", withExtension: "momd")
     }()
 
-
     // MARK: - SETUP
     override func setUp() {
         super.setUp()
         let expect = expectation(description: "store init")
         stack = CoreDataStack(type: .memory, model: CoreDataTests.model) {
             switch $0 {
-            case .success(_):
+            case .success:
                 expect.fulfill()
             case .failure(let error):
                 XCTFail(error.localizedDescription)
             }
         }
-        waitForExpectations(timeout: 5, handler: { error in })
+        waitForExpectations(timeout: 5, handler: { _ in })
     }
 
     override func tearDown() {
@@ -42,7 +41,7 @@ class CoreDataStackTests: XCTestCase {
             stack = CoreDataStack(type: .sqlite, modelUrl: url) { _ in
                 expect.fulfill()
             }
-            waitForExpectations(timeout: 5, handler: { error in })
+            waitForExpectations(timeout: 5, handler: { _ in })
         }
         XCTAssertNotNil(stack?.persistentStoreCoordinator)
         _ = try? FileManager.default.removeItem(at: stack!.storeURL!)
@@ -54,7 +53,7 @@ class CoreDataStackTests: XCTestCase {
             stack = CoreDataStack(type: .memory, modelUrl: url) { _ in
                 expect.fulfill()
             }
-            waitForExpectations(timeout: 5, handler: { error in })
+            waitForExpectations(timeout: 5, handler: { _ in })
         }
         XCTAssertNotNil(stack?.persistentStoreCoordinator)
     }

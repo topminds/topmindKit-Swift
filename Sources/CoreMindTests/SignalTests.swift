@@ -67,9 +67,8 @@ final class SignalTests: XCTestCase {
         waitForExpectations(timeout: 0, handler: nil)
     }
 
-
     // Helper
-    func givenSignal<T: Equatable>(_ v: T, expectation e: XCTestExpectation, file: String = #file, line: UInt = #line) -> ((Swift.Result<T, Error>) -> (), Signal<T>) {
+    func givenSignal<T: Equatable>(_ v: T, expectation e: XCTestExpectation, file: String = #file, line: UInt = #line) -> ((Swift.Result<T, Error>) -> Void, Signal<T>) {
         let (sink, signal) = Signal<T>.pipe()
 
         givenSubscription(signal, value: v, expectation: e, file: file, line: line)

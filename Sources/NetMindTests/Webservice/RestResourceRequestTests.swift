@@ -8,7 +8,7 @@ import XCTest
 
 final class RestResourceRequestTests: XCTestCase {
 
-    func testResourcePaths(){
+    func testResourcePaths() {
         var sut = givenGet()
         XCTAssertEqual("fixture 123", sut.path)
 
@@ -22,7 +22,7 @@ final class RestResourceRequestTests: XCTestCase {
         XCTAssertEqual("fixture 123", sut.path)
     }
 
-    func testResourceMethods(){
+    func testResourceMethods() {
         var sut = givenGet()
         XCTAssertEqual(.get, sut.method)
 
@@ -36,7 +36,7 @@ final class RestResourceRequestTests: XCTestCase {
         XCTAssertEqual(.delete, sut.method)
     }
 
-    func testResourceParameters(){
+    func testResourceParameters() {
         var sut = givenGet()
         XCTEqualAnyDictionaryWithValuesOfString([:], sut.queryParameters)
 
@@ -73,8 +73,8 @@ final class RestResourceRequestTests: XCTestCase {
         return UserResource(id: "fixture 123", name: "fixture name")
     }
 
-    func XCTEqualAnyDictionaryWithValuesOfString(_ a: Dictionary<String, Any>,
-                                                 _ b: Dictionary<String, Any>,
+    func XCTEqualAnyDictionaryWithValuesOfString(_ a: [String: Any],
+                                                 _ b: [String: Any],
                                                  file: String = #file,
                                                  line: UInt = #line) {
 

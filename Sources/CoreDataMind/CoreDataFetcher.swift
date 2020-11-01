@@ -26,11 +26,11 @@ public struct CoreDataFetcher<T: NSManagedObject> {
 
     public typealias Entity = T
 
-    public typealias BuilderCallback = (Entity) -> ()
+    public typealias BuilderCallback = (Entity) -> Void
     public typealias CollectionResult = Result<[Entity], Error>
     public typealias EntityResult = Result<Entity, Error>
-    public typealias CollectionCompletion = (CollectionResult) -> ()
-    public typealias EntityCompletion = (EntityResult) -> ()
+    public typealias CollectionCompletion = (CollectionResult) -> Void
+    public typealias EntityCompletion = (EntityResult) -> Void
 
     // MARK: - PROPERTIES
     public let context: NSManagedObjectContext
@@ -53,15 +53,13 @@ public struct CoreDataFetcher<T: NSManagedObject> {
 
         do {
             guard let result = try context.existingObject(with: identifier) as? Entity else {
-                return .failure(CoreDataError.entityNotFound(entity:  NSStringFromClass(Entity.self)))
+                return .failure(CoreDataError.entityNotFound(entity: NSStringFromClass(Entity.self)))
             }
             return .success(result)
         } catch {
             return .failure(error)
         }
     }
-
-
 
     // MARK: - All
     public func all() -> CollectionResult {
@@ -75,7 +73,7 @@ public struct CoreDataFetcher<T: NSManagedObject> {
     public func all<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject) -> CollectionResult {
         all(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value)
     }
-    
+
     public func all(attribute: String, value: AnyObject) -> CollectionResult {
         let predicate = NSPredicate(attribute: attribute, value: value, operation: .equal)
         return all(configuration: configuration(predicate: predicate))
@@ -97,7 +95,7 @@ public struct CoreDataFetcher<T: NSManagedObject> {
     public func all<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject, completion: @escaping CollectionCompletion) {
         all(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value, completion: completion)
     }
-    
+
     public func all(attribute: String, value: AnyObject, completion: @escaping CollectionCompletion) {
         let predicate = NSPredicate(attribute: attribute, value: value, operation: .equal)
         let config = configuration(predicate: predicate)
@@ -110,12 +108,11 @@ public struct CoreDataFetcher<T: NSManagedObject> {
         }
     }
 
-
     // MARK: - First
     public func first<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject) -> EntityResult {
         first(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value)
     }
-    
+
     public func first(attribute: String, value: AnyObject) -> EntityResult {
         extractFirst(all(attribute: attribute, value: value))
     }
@@ -127,7 +124,7 @@ public struct CoreDataFetcher<T: NSManagedObject> {
     public func first<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject, completion: @escaping EntityCompletion) {
         first(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value, completion: completion)
     }
-    
+
     public func first(attribute: String, value: AnyObject, completion: @escaping EntityCompletion) {
         all(attribute: attribute, value: value) {
             completion(self.extractFirst($0))
@@ -137,7 +134,7 @@ public struct CoreDataFetcher<T: NSManagedObject> {
     public func firstOrCreate<U: Any>(keyPath: KeyPath<Entity, U>, value: AnyObject, builder: BuilderCallback? = nil) -> EntityResult {
         firstOrCreate(attribute: NSExpression(forKeyPath: keyPath).keyPath, value: value, builder: builder)
     }
-    
+
     public func firstOrCreate(attribute: String, value: AnyObject, builder: BuilderCallback? = nil) -> EntityResult {
         let predicate = NSPredicate(attribute: attribute, value: value, operation: .equal)
         return firstOrCreate(configuration: configuration(predicate: predicate), builder: builder)
@@ -152,7 +149,6 @@ public struct CoreDataFetcher<T: NSManagedObject> {
         }
         return create(builder)
     }
-
 
     // MARK: - Requests
     public func fetchRequest(configuration config: RequestConfig) -> NSFetchRequest<Entity> {
@@ -234,7 +230,7 @@ public struct CoreDataFetcher<T: NSManagedObject> {
         switch result {
         case .success(let entities):
             guard let entity = entities.first else {
-                return .failure(CoreDataError.entityNotFound(entity:  NSStringFromClass(Entity.self)))
+                return .failure(CoreDataError.entityNotFound(entity: NSStringFromClass(Entity.self)))
             }
             return .success(entity)
 

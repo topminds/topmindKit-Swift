@@ -42,7 +42,6 @@ extension String {
         return hashData?.sha512.hex
     }
 
-
     // MARK: - Private
 
     private var hashData: Data? {

@@ -11,7 +11,7 @@ extension UIActivityIndicatorView {
         get {
             return self.isAnimating
         }
-        
+
         set {
             if newValue {
                 self.isHidden = false

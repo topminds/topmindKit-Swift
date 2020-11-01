@@ -8,7 +8,7 @@ import CryptoMind
 
 final class HashingTests: XCTestCase {
 
-    // Mark: Simple
+    // MARK: Simple
     func testMD2Hash() {
         XCTAssertEqual("19ef609c2d7dd8e24776be2ba948d5b9", "iTranslate".md2)
     }
@@ -40,7 +40,7 @@ final class HashingTests: XCTestCase {
     func testSHA512Hash() {        XCTAssertEqual("d9861752553eca21f05b5b210244b0aa394c90b082c71615fefa1e9ed41b176f916fc2e005d776943c4fecd0f11ad9d9b7ad2ed5995a44ae1a162f2fcc141b1c", "iTranslate".sha512)
     }
 
-    // Mark: special characters
+    // MARK: special characters
 
     func testMD2HashUnicode() {
         XCTAssertEqual("b1e58e8f09666a5ef15f500c0f54ab68", "iTränslaté ❤翻译".md2)
@@ -74,7 +74,7 @@ final class HashingTests: XCTestCase {
         XCTAssertEqual("cd314c8aecc62017c6bbfc20228bb4ac348304f8db1c3c34cfcad21e99f917eb11150309fce4b0799bd54bfd156cbb85002ed2936fd0c18dcbfd4a5ff018f6d9", "iTränslaté ❤翻译".sha512)
     }
 
-    // Mark: boundary test for empty strings
+    // MARK: boundary test for empty strings
 
     func testMD2HashEmpty() {
         XCTAssertEqual("8350e5a3e24c153df2275c9f80692773", "".md2)
@@ -107,9 +107,9 @@ final class HashingTests: XCTestCase {
     func testSHA512HashEmpty() {
         XCTAssertEqual("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e", "".sha512)
     }
-    
+
     // MD5 Test Vectors
-    
+
     func testMD5TestVectors() {
         XCTAssertEqual("d41d8cd98f00b204e9800998ecf8427e", "".md5)
         XCTAssertEqual("0cc175b9c0f1b6a831c399e269772661", "a".md5)

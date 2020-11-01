@@ -9,7 +9,7 @@ public final class ContextObserver<T: NSManagedObject> {
 
     public typealias Entity = T
 
-    public typealias ChangedEvent = (_ inserted: [Entity]?, _ updated: [Entity]?, _ deleted: [Entity]?) -> ()
+    public typealias ChangedEvent = (_ inserted: [Entity]?, _ updated: [Entity]?, _ deleted: [Entity]?) -> Void
 
     fileprivate let context: NSManagedObjectContext
     fileprivate let persistentStoreCoordinator: NSPersistentStoreCoordinator?

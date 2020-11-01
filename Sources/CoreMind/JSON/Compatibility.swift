@@ -85,20 +85,17 @@ public func decode(json: JSONObject, key: String) throws -> Double {
     return try json.decode(key: key)
 }
 
-
 // MARK: date decoding
 @available(*, deprecated, message: "Please switch to `json.decode(key:format:)` method.")
 public func decode(json: JSONObject, key: String, format: String? = nil) throws -> Date {
     return try json.decode(key: key, format: format)
 }
 
-
 // MARK: url decoding
 @available(*, deprecated, message: "Please switch to `json.decode(key:)` method.")
 public func decode(json: JSONObject, key: String) throws -> URL {
     return try json.decode(key: key)
 }
-
 
 // MARK: RawRepresentable
 

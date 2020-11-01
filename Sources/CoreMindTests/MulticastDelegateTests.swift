@@ -132,7 +132,7 @@ final class MulticastDelegateTests: XCTestCase {
         XCTAssertEqual(sut.observers.count, 1)
     }
 
-    // Mark: Helper
+    // MARK: Helper
 
     @discardableResult
     func givenObserving() -> MulticastObserverMock {

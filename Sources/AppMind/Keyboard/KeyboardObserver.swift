@@ -15,7 +15,7 @@ public final class KeyboardObserver {
         public let duration: TimeInterval
     }
 
-    public typealias Callback = (Info) -> ()
+    public typealias Callback = (Info) -> Void
 
     public var onWillShow: Callback?
     public var onDidShow: Callback?
@@ -67,7 +67,7 @@ public final class KeyboardObserver {
 }
 
 extension UIView {
-    public static func animateAlongsideKeyboard(info: KeyboardObserver.Info, animations: @escaping (() -> ()), completion: ((Bool) -> ())? = nil) {
+    public static func animateAlongsideKeyboard(info: KeyboardObserver.Info, animations: @escaping (() -> Void), completion: ((Bool) -> Void)? = nil) {
         UIView.animate(withDuration: info.duration,
                        delay: 0,
                        options: info.animationOptions,

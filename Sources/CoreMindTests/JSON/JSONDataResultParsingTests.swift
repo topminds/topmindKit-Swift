@@ -43,7 +43,7 @@ final class JSONDataResultParsingTests: XCTestCase {
         let result: Swift.Result<Data, Error> = .success(jsonDataNok)
         let parsed: Swift.Result<Fixture, Error> = result.parse()
 
-        if case .success(_) = parsed {
+        if case .success = parsed {
             XCTFail("Should not succeed")
         }
     }
@@ -52,9 +52,9 @@ final class JSONDataResultParsingTests: XCTestCase {
         let result: Swift.Result<Data, Error> = .success(jsonDataNokList)
         let parsed: Swift.Result<[Fixture], Error> = result.parse()
 
-        if case .success(_) = parsed {
+        if case .success = parsed {
             XCTFail("Should not succeed")
         }
     }
-    
+
 }

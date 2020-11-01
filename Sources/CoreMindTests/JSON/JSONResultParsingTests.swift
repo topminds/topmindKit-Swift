@@ -30,7 +30,7 @@ final class JSONResultParsingTests: XCTestCase {
         let result: Swift.Result<JSONObject, Error> = .success(["hello": ["world": "1"]])
         let parsed: Swift.Result<[ParseNok], Error> = result.parse(key: "hello")
 
-        if case .success(_) = parsed {
+        if case .success = parsed {
             XCTFail("Should not succeed")
         }
     }
@@ -39,9 +39,9 @@ final class JSONResultParsingTests: XCTestCase {
         let result: Swift.Result<JSONObject, Error> = .success(["hello": ["world": "1"]])
         let parsed: Swift.Result<[ParseNok], Error> = result.parse(key: "hello")
 
-        if case .success(_) = parsed {
+        if case .success = parsed {
             XCTFail("Should not succeed")
         }
     }
-    
+
 }

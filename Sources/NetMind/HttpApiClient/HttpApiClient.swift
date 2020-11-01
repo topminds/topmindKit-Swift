@@ -74,10 +74,10 @@ extension HttpApiClient {
     }
 
     internal func send(request: URLRequest) -> AnyPublisher<Data, HttpApiError> {
-                
+
         var mutableRequest = request
         delegate?.httpApiClient(self, willSend: &mutableRequest)
-                
+
         return session
             .dataTaskPublisher(for: request)
             .mapError { HttpApiError.urlError($0) }
@@ -92,7 +92,7 @@ extension HttpApiClient {
                                                 reason: HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode)
                     )
                 }
-                
+
                 return data
             }
             .mapError { ($0 as? HttpApiError) ?? HttpApiError.unknown($0) }

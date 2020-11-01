@@ -11,7 +11,7 @@ public enum HttpMethod: String {
 
 public enum WebserviceRequestError: Error {
     case couldNotCreateUrl(URL)
-    
+
     public var localizedDescription: String {
         switch self {
         case .couldNotCreateUrl(let url):

@@ -26,7 +26,7 @@ public final class Atomic<T> {
     }
 
     @discardableResult
-    public func mutate(_ transform: (inout T) -> ()) -> T {
+    public func mutate(_ transform: (inout T) -> Void) -> T {
         return queue.sync {
             transform(&self.internalValue)
             return self.internalValue

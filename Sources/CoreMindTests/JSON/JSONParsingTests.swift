@@ -21,7 +21,7 @@ final class JSONParsingTests: XCTestCase {
         let sut = try! JSON(json: [:])
         let parsed: Swift.Result<ParseNok, Error> = sut.parse()
 
-        if case .success(_) = parsed {
+        if case .success = parsed {
             XCTFail("Should not succeed")
         }
     }
@@ -39,11 +39,10 @@ final class JSONParsingTests: XCTestCase {
         let sut = try! JSON(json: [[:], [:], [:]])
         let parsed: Swift.Result<[ParseNok], Error> = sut.parse()
 
-        if case .success(_) = parsed {
+        if case .success = parsed {
             XCTFail("Should not succeed")
         }
     }
-
 
     func testDecodableObjectParsing() {
         let jsonDataOk = try! JSONEncoder().encode(Fixture(name: "Fixture"))
@@ -64,5 +63,5 @@ final class JSONParsingTests: XCTestCase {
             XCTFail("\(error)")
         }
     }
-    
+
 }

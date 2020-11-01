@@ -7,5 +7,5 @@ import XCTest
 @testable import NetMind
 
 final class WebserviceTests: XCTestCase {
-    
+
 }

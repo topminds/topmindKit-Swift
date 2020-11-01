@@ -12,7 +12,7 @@ public enum RestResourceRequest<T: Codable, U: Equatable>: WebserviceRequest {
     case update(id: U, T)
     case delete(id: U)
 
-    public var queryParameters: [String : String] {
+    public var queryParameters: [String: String] {
         return [:]
     }
 
@@ -26,7 +26,7 @@ public enum RestResourceRequest<T: Codable, U: Equatable>: WebserviceRequest {
         }
     }
 
-    public func decode<T>(response: WebserviceResponse, with format: WebserviceFormat) -> Result<T, Error> where T : Decodable {
+    public func decode<T>(response: WebserviceResponse, with format: WebserviceFormat) -> Result<T, Error> where T: Decodable {
         return format.deserialize(decodable: response.data)
     }
 
@@ -46,5 +46,5 @@ public enum RestResourceRequest<T: Codable, U: Equatable>: WebserviceRequest {
         case .update: return .put
         case .delete: return .delete
         }
-    }    
+    }
 }

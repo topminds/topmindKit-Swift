@@ -19,9 +19,9 @@ public final class KeyValueObserver<T>: NSObject {
     public let object: NSObject
 
     private var context = 0
-    private let callback: (KeyValueChange<T>) -> ()
+    private let callback: (KeyValueChange<T>) -> Void
 
-    public init(object: NSObject, keyPath: String, callback: @escaping (KeyValueChange<T>) -> ()) {
+    public init(object: NSObject, keyPath: String, callback: @escaping (KeyValueChange<T>) -> Void) {
 
         assert(object.value(forKeyPath: keyPath) is T,
                "Incorrect observation type `\(T.self)` for keypath `\(keyPath)` on object of class `\(NSStringFromClass(object.classForCoder))`.")
@@ -39,7 +39,7 @@ public final class KeyValueObserver<T>: NSObject {
         object.removeObserver(self, forKeyPath: keyPath)
     }
 
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard keyPath == self.keyPath,
             context == &self.context else {
             assertionFailure("Incorrect observer target.")

@@ -5,8 +5,8 @@
 
 import Foundation
 
-public typealias JSONArray = Array<Any>
-public typealias JSONObject = Dictionary<String, Any>
+public typealias JSONArray = [Any]
+public typealias JSONObject = [String: Any]
 
 @available(*, deprecated, message: "use JSONObject")
 public typealias JSONDictionary = JSONObject

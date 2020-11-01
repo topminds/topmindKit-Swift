@@ -27,7 +27,7 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
 
         return attribute
     }
-    
+
     public func decode<T>(key: String) throws -> T {
         guard let attribute = try value(for: key) as? T else {
             throw JSONError.invalidAttributeType(key: key,
@@ -37,7 +37,7 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
 
         return attribute
     }
-    
+
     // MARK: JSONDeserializable
 
     public func decode<T: JSONDeserializable>() throws -> T {
@@ -53,7 +53,7 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
         guard let value = try valueIfPresent(for: key) else {
             return nil
         }
-        
+
         guard let attribute = value as? JSONObject else {
             throw JSONError.invalidAttributeType(key: key,
                                                  expectedType: T.self,
@@ -62,7 +62,7 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
 
         return try T.init(json: attribute)
     }
-    
+
     public func decode<T: JSONDeserializable>(key: String) throws -> T {
         guard let attribute = try value(for: key) as? JSONObject else {
             throw JSONError.invalidAttributeType(key: key,
@@ -74,7 +74,7 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
     }
 
     // MARK: Array
-    
+
     public func decodeIfPresent<T: JSONDeserializable>(key: String) throws -> [T]? {
         guard let value = try valueIfPresent(for: key) else {
             return nil
@@ -86,7 +86,7 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
 
         return array.compactMap { try? T(json: $0) }
     }
-    
+
     public func decode<T: JSONDeserializable>(key: String) throws -> [T] {
         guard let json = self as? JSONObject else {
             throw JSONError.invalidType(receivedValue: type(of: self))
@@ -115,17 +115,17 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
     }
 
     // MARK: primitive data type decodingIfPresent
-    
+
     public func decodeIfPresent(key: String) throws -> Int? {
         let number: NSNumber? = try decodeIfPresent(key: key)
         return number?.intValue
     }
-    
+
     public func decodeIfPresent(key: String) throws -> UInt? {
         let number: NSNumber? = try decodeIfPresent(key: key)
         return number?.uintValue
     }
-    
+
     public func decodeIfPresent(key: String) throws -> Int8? {
         let number: NSNumber? = try decodeIfPresent(key: key)
         return number?.int8Value
@@ -175,19 +175,19 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
         let number: NSNumber? = try decodeIfPresent(key: key)
         return number?.doubleValue
     }
-    
+
     // MARK: primitive data type decoding
-        
+
     public func decode(key: String) throws -> Int {
         let number: NSNumber = try decode(key: key)
         return number.intValue
     }
-    
+
     public func decode(key: String) throws -> UInt {
         let number: NSNumber = try decode(key: key)
         return number.uintValue
     }
-    
+
     public func decode(key: String) throws -> Int8 {
         let number: NSNumber = try decode(key: key)
         return number.int8Value
@@ -237,7 +237,7 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
         let number: NSNumber = try decode(key: key)
         return number.doubleValue
     }
-    
+
     // MARK: date decoding
 
     public func decodeIfPresent(key: String, format: String? = nil) throws -> Date? {
@@ -247,12 +247,12 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
         let date: Date = try decode(key: key, value: value, format: format)
         return date
     }
-    
+
     public func decode(key: String, format: String? = nil) throws -> Date {
         let date: Date = try decode(key: key, value: try value(for: key), format: format)
         return date
     }
-    
+
     public func decode(key: String, value: Any, format: String?) throws -> Date {
         if let string = value as? String {
             if format == nil {
@@ -284,14 +284,13 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
         throw JSONError.invalidAttributeType(key: key, expectedType: String.self, receivedValue: value)
     }
 
-
     // MARK: url decoding
 
     public func decodeIfPresent(key: String) throws -> URL? {
         guard let urlString: String = try decodeIfPresent(key: key) else {
             return nil
         }
-        
+
         guard let encodedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             let url = URL(string: encodedUrlString) else {
                 throw JSONError.invalidAttributeType(key: key, expectedType: URL.self, receivedValue: urlString)
@@ -299,7 +298,7 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
 
         return url
     }
-    
+
     public func decode(key: String) throws -> URL {
 
         let urlString: String = try decode(key: key)
@@ -312,21 +311,20 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
         return url
     }
 
-
     // MARK: Raw Representables / Enums
 
     public func decodeIfPresent<T: RawRepresentable>(key: String) throws -> T? where T.RawValue == String {
         guard try valueIfPresent(for: key) != nil else {
             return nil
         }
-        
+
         guard let json = self as? JSONObject else {
             throw JSONError.invalidType(receivedValue: type(of: self))
         }
-        
+
         return try json.decodeEnum(key: key)
     }
-    
+
     public func decode<T: RawRepresentable>(key: String) throws -> T where T.RawValue == String {
         guard let json = self as? JSONObject else {
             throw JSONError.invalidType(receivedValue: type(of: self))
@@ -334,21 +332,21 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
 
         return try json.decodeEnum(key: key)
     }
-    
+
     /*  T.RawValue is concrete due to ambiguity issues */
-    
+
     public func decodeIfPresent<T: RawRepresentable>(key: String) throws -> T? where T.RawValue == Int {
         guard try valueIfPresent(for: key) != nil else {
             return nil
         }
-        
+
         guard let json = self as? JSONObject else {
             throw JSONError.invalidType(receivedValue: type(of: self))
         }
 
         return try json.decodeEnum(key: key)
     }
-    
+
     public func decode<T: RawRepresentable>(key: String) throws -> T where T.RawValue == Int {
         guard let json = self as? JSONObject else {
             throw JSONError.invalidType(receivedValue: type(of: self))
@@ -356,12 +354,12 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
 
         return try json.decodeEnum(key: key)
     }
-    
+
     public func decodeIfPresent<T: RawRepresentable>(key: String) throws -> [T]? {
         guard let value = try valueIfPresent(for: key) else {
             return nil
         }
-        
+
         guard let array = value as? [T.RawValue] else {
             throw JSONError.invalidAttributeType(key: key,
                                                  expectedType: [T].self,
@@ -372,9 +370,9 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
     }
 
     public func decode<T: RawRepresentable>(key: String) throws -> [T] {
-        
+
         let v = try value(for: key)
-        
+
         guard let array = v as? [T.RawValue] else {
             throw JSONError.invalidAttributeType(key: key,
                                                  expectedType: [T].self,
@@ -401,9 +399,9 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
             }
             return enumValue
     }
-    
+
     // Helper
-    
+
     private func decodeGenericIfPresent<T>(key: String) throws -> T? {
         guard let value = try valueIfPresent(for: key) else {
             return nil
@@ -417,7 +415,7 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
 
         return attribute
     }
-    
+
     private func decodeGeneric<T>(key: String) throws -> T {
         guard let attribute = try value(for: key) as? T else {
             throw JSONError.invalidAttributeType(key: key,
@@ -432,23 +430,23 @@ extension Sequence where Iterator.Element == (key: String, value: Any) {
         guard let json = self as? JSONObject else {
             throw JSONError.invalidType(receivedValue: type(of: self))
         }
-        
+
         guard (json[key] as? NSNull) == nil else {
             return nil
         }
-        
+
         return json[key]
     }
-    
+
     private func value(for key: String) throws  -> Any {
         guard let json = self as? JSONObject else {
             throw JSONError.invalidType(receivedValue: type(of: self))
         }
-        
+
         guard let value = json[key] else {
             throw JSONError.missingAttribute(key: key)
         }
-        
+
         return value
     }
 }

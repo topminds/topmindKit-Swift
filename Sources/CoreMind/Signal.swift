@@ -11,10 +11,10 @@ import Foundation
 @available(*, deprecated, message: "Please use `Combine`")
 public final class Signal<T> {
 
-    private var callbacks = [UUID: (Swift.Result<T, Error>) -> ()]()
+    private var callbacks = [UUID: (Swift.Result<T, Error>) -> Void]()
     private var disposables = [Any]()
 
-    public func subscribe(callback: @escaping (Swift.Result<T, Error>) -> ()) -> Disposable {
+    public func subscribe(callback: @escaping (Swift.Result<T, Error>) -> Void) -> Disposable {
         let token = UUID()
         callbacks[token] = callback
         return Disposable {
@@ -32,9 +32,9 @@ public final class Signal<T> {
         }
     }
 
-    public static func pipe() -> ((Swift.Result<T, Error>) -> (), Signal<T>) {
+    public static func pipe() -> ((Swift.Result<T, Error>) -> Void, Signal<T>) {
         let signal = Signal<T>()
-        let weakSend: (Swift.Result<T, Error>) -> () = {
+        let weakSend: (Swift.Result<T, Error>) -> Void = {
             [weak signal] in signal?.send($0)
         }
         return (weakSend, signal)

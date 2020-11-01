@@ -6,12 +6,12 @@
 import Foundation
 
 public protocol WebserviceCallerDelegate: class {
-    func webserviceCaller(_ caller: WebserviceCaller, didRequestHeaders for: WebserviceRequest, completion: @escaping ([String: String]?) -> ())
+    func webserviceCaller(_ caller: WebserviceCaller, didRequestHeaders for: WebserviceRequest, completion: @escaping ([String: String]?) -> Void)
 }
 
 public enum WebserviceCallerError: Error {
     case noData
-    
+
     public var localizedDescription: String {
         switch self {
         case .noData: return "Webservice did not return data"
@@ -84,7 +84,7 @@ extension WebserviceCaller {
 
 extension WebserviceCaller {
 
-    internal func request(for request: WebserviceRequest, serviceUrl: URL, headers: [String: String], completion: @escaping (Result<URLRequest, Error>) -> ()) {
+    internal func request(for request: WebserviceRequest, serviceUrl: URL, headers: [String: String], completion: @escaping (Result<URLRequest, Error>) -> Void) {
 
         if let delegate = self.delegate {
 

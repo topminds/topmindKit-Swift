@@ -64,7 +64,7 @@ final class RatingTrackerTests: XCTestCase {
         XCTAssertTrue(sut.timeForRating())
     }
 
-    // Mark: Helper
+    // MARK: Helper
 
     func givenRatingTracker(store: RatingStore = RatingStore(userDefaults: UserDefaults.standard)) {
         sut = RatingTracker(

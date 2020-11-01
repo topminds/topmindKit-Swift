@@ -34,7 +34,7 @@ struct Dummy: Equatable, JSONDeserializable {
         nameOptional = try json.decodeIfPresent(key: "name_optional")
         createdAt = try json.decode(key: "created_at")
         createdAtOptional = try json.decodeIfPresent(key: "created_at_optional")
-        
+
         do {
             let url: URL = try json.decode(key: "url")
             self.url = url
@@ -63,7 +63,7 @@ final class jsonTests: XCTestCase {
         let dummy: [String] = try json.decode(key: "array")
         XCTAssertEqual(dummy, ["A", "B", "C"])
     }
-    
+
     func testStringArrayOptionalDeserialization() throws {
         let json: [String: Any] = ["array": ["A", "B", "C"]]
 
@@ -77,7 +77,7 @@ final class jsonTests: XCTestCase {
         let dummy: [Int] = try json.decode(key: "array")
         XCTAssertEqual(dummy, [1, 2, 3])
     }
-    
+
     func testIntArrayOptionalDeserialization() throws {
         let json: [String: Any] = ["array": [1, 2, 3]]
 
@@ -100,7 +100,6 @@ final class jsonTests: XCTestCase {
 
     func testDeserializationNested() throws {
         let json: [String: Any] = ["dummy": givenDummyPayload()]
-        
 
         let sut: Dummy = try json.decode(key: "dummy")
 
@@ -116,14 +115,14 @@ final class jsonTests: XCTestCase {
 
         XCTAssertEqual(sut, URL(string: "http://topmind.eu"))
     }
-    
+
     func testUrlDeserializationWithEncodingIssues() throws {
         let json: [String: Any] = [
             "url": "http://topmind.eu/this is a bad path/"
         ]
-        
+
         let sut: URL = try json.decode(key: "url")
-        
+
         XCTAssertEqual(sut, URL(string: "http://topmind.eu/this%20is%20a%20bad%20path/"))
     }
 
@@ -135,7 +134,7 @@ final class jsonTests: XCTestCase {
         let sut: String = try json.decode(key: "string")
         XCTAssertEqual("string", sut)
     }
-    
+
     func testStringOptionalWithValueDeserialization() throws {
         let json: [String: Any] = [
             "string": "string"
@@ -144,7 +143,7 @@ final class jsonTests: XCTestCase {
         let sut: String? = try json.decodeIfPresent(key: "string")
         XCTAssertEqual("string", sut)
     }
-    
+
     func testStringOptionalWithNullDeserialization() throws {
         let json: [String: Any] = [
             "string": NSNull()
@@ -153,14 +152,14 @@ final class jsonTests: XCTestCase {
         let sut: String? = try json.decodeIfPresent(key: "string")
         XCTAssertNil(sut)
     }
-    
+
     func testStringOptionalMissingDeserialization() throws {
         let json: [String: Any] = [:]
 
         let sut: String? = try json.decodeIfPresent(key: "string")
         XCTAssertNil(sut)
     }
-    
+
     func testIntDeserialization() throws {
         let json: [String: Any] = [
             "num": 123.321
@@ -169,7 +168,7 @@ final class jsonTests: XCTestCase {
         let sut: Int = try json.decode(key: "num")
         XCTAssertEqual(123, sut)
     }
-    
+
     func testIntOptionalWithValueDeserialization() throws {
         let json: [String: Any] = [
             "num": 123.321
@@ -187,7 +186,7 @@ final class jsonTests: XCTestCase {
         let sut: UInt = try json.decode(key: "num")
         XCTAssertEqual(123, sut)
     }
-    
+
     func testUIntOptionalDeserialization() throws {
         do {
             let json: [String: Any] = [
@@ -209,7 +208,7 @@ final class jsonTests: XCTestCase {
         let sut: Int8 = try json.decode(key: "num")
         XCTAssertEqual(123, sut)
     }
-    
+
     func testInt8OptionalDeserialization() throws {
         let json: [String: Any] = [
             "num": 123.321
@@ -241,19 +240,19 @@ final class jsonTests: XCTestCase {
         let json: [String: Any] = [
             "num": 123.321
         ]
-        
+
         let sut: Int16 = try json.decode(key: "num")
-        
+
         XCTAssertEqual(123, sut)
     }
-    
+
     func testInt16OptionalDeserialization() throws {
         let json: [String: Any] = [
             "num": 123.321
         ]
-        
+
         let sut: Int16? = try json.decodeIfPresent(key: "num")
-        
+
         XCTAssertEqual(123, sut)
     }
 
@@ -266,7 +265,7 @@ final class jsonTests: XCTestCase {
 
         XCTAssertEqual(123, sut)
     }
-    
+
     func testUInt16OptionalDeserialization() throws {
         let json: [String: Any] = [
             "num": 123.321
@@ -276,24 +275,24 @@ final class jsonTests: XCTestCase {
 
         XCTAssertEqual(123, sut)
     }
-    
+
     func testInt32Deserialization() throws {
         let json: [String: Any] = [
             "num": 1234.3214
         ]
-        
+
         let sut: Int32 = try json.decode(key: "num")
-        
+
         XCTAssertEqual(1234, sut)
     }
-    
+
     func testInt32OptionalDeserialization() throws {
         let json: [String: Any] = [
             "num": 1234.3214
         ]
-        
+
         let sut: Int32? = try json.decodeIfPresent(key: "num")
-        
+
         XCTAssertEqual(1234, sut)
     }
 
@@ -306,7 +305,7 @@ final class jsonTests: XCTestCase {
 
         XCTAssertEqual(1234, sut)
     }
-    
+
     func testUInt32OptionalDeserialization() throws {
         let json: [String: Any] = [
             "num": 1234.3214
@@ -326,7 +325,7 @@ final class jsonTests: XCTestCase {
 
         XCTAssertEqual(123456, sut)
     }
-    
+
     func testInt64OptionalDeserialization() throws {
         let json: [String: Any] = [
             "num": 123456.321456
@@ -346,7 +345,7 @@ final class jsonTests: XCTestCase {
 
         XCTAssertEqual(123456, sut)
     }
-    
+
     func testUInt64OptionalDeserialization() throws {
         let json: [String: Any] = [
             "num": 123456.321456
@@ -356,91 +355,91 @@ final class jsonTests: XCTestCase {
 
         XCTAssertEqual(123456, sut)
     }
-    
+
     func testFloatDeserializationWithWholeValue() throws {
         let json: [String: Any] = [
             "num": 123.321456
         ]
-        
+
         let sut: Float = try json.decode(key: "num")
-        
+
         XCTAssertEqual(123.321456, sut)
     }
-    
+
     func testFloatOptionalDeserializationWithWholeValue() throws {
         let json: [String: Any] = [
             "num": 123.321456
         ]
-        
+
         let sut: Float? = try json.decodeIfPresent(key: "num")
-        
+
         XCTAssertEqual(123.321456, sut)
     }
-    
+
     func testFloatDeserializationWithDoubleValue() throws {
         let json: [String: Any] = [
             "num": 123456.1234567891
         ]
-        
+
         let sut: Float = try json.decode(key: "num")
-        
+
         XCTAssertEqual(123456.1234567891, sut)
     }
-    
+
     func testFloatOptionalDeserializationWithDoubleValue() throws {
         let json: [String: Any] = [
             "num": 123456.1234567891
         ]
-        
+
         let sut: Float? = try json.decodeIfPresent(key: "num")
-        
+
         XCTAssertEqual(123456.1234567891, sut)
     }
-    
+
     func testDoubleDeserializationWithWholeValue() throws {
         let json: [String: Any] = [
             "num": 123.321456
         ]
-        
+
         let sut: Double = try json.decode(key: "num")
-        
+
         XCTAssertEqual(123.321456, sut)
     }
-    
+
     func testDoubleOptionalDeserializationWithWholeValue() throws {
         let json: [String: Any] = [
             "num": 123.321456
         ]
-        
+
         let sut: Double? = try json.decodeIfPresent(key: "num")
-        
+
         XCTAssertEqual(123.321456, sut)
     }
-    
+
     func testDoubleDeserializationWithDoubleValue() throws {
         let json: [String: Any] = [
             "num": 123456.1234567891
         ]
-        
+
         let sut: Double = try json.decode(key: "num")
-        
+
         XCTAssertEqual(123456.1234567891, sut)
     }
-    
+
     func testDoubleOptionalDeserializationWithDoubleValue() throws {
         let json: [String: Any] = [
             "num": 123456.1234567891
         ]
-        
+
         let sut: Double? = try json.decodeIfPresent(key: "num")
-        
+
         XCTAssertEqual(123456.1234567891, sut)
     }
 
     func testUrlOptionalDeserializationWithIncorrectValue() throws {
         var json: [String: Any] = givenDummyPayload()
         json["url"] = ""
-        
+
         let dummy: Dummy = try json.decode()
 
         XCTAssertNotNil(dummy)
@@ -520,7 +519,7 @@ final class jsonTests: XCTestCase {
         let dummy: [DummyEnum] = try json.decode(key: "enumvalues")
         XCTAssertEqual(dummy, [.A, .B, .C])
     }
-    
+
     func testStringEnumArrayOptionalDeserialization() throws {
         let json: [String: Any] = ["enumvalues": ["A", "B", "C"]]
 
@@ -541,7 +540,7 @@ final class jsonTests: XCTestCase {
         let dummy: [DummyIntEnum] = try json.decode(key: "enumvalues")
         XCTAssertEqual(dummy, [.A, .B, .C])
     }
-    
+
     func testIntEnumArrayOptionalDeserialization() throws {
         let json: [String: Any] = ["enumvalues": [0, 1, 2]]
 
@@ -576,10 +575,10 @@ final class jsonTests: XCTestCase {
         let json: [String: Any] = [
             "timestamp": 1474576117
         ]
-        
+
         XCTAssertEqual(try json.decode(key: "timestamp"), date)
     }
-    
+
     func givenDummyPayload(name: String = "Fixture", optional: Bool = false) -> [String: Any] {
         return [
             "name": name,

@@ -22,7 +22,7 @@ public extension NSManagedObjectContext {
 
 }
 
-public typealias CoreDataInitCompletion = (Result<NSManagedObjectContext, Error>) -> ()
+public typealias CoreDataInitCompletion = (Result<NSManagedObjectContext, Error>) -> Void
 
 /// Object holiding and handling the complete core data stack
 public final class CoreDataStack: CoreDataTrait {

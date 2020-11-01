@@ -6,7 +6,7 @@
 import XCTest
 
 /// http://owensd.io/2015/06/19/xctest-missing-throws-testing.html
-func XCTAssertDoesNotThrow(_ fn: @autoclosure () throws -> (), message: String = ""/*, file: StaticString = #file, line: UInt = #line*/) {
+func XCTAssertDoesNotThrow(_ fn: @autoclosure () throws -> Void, message: String = ""/*, file: StaticString = #file, line: UInt = #line*/) {
     do {
         try fn()
     } catch {
@@ -15,7 +15,7 @@ func XCTAssertDoesNotThrow(_ fn: @autoclosure () throws -> (), message: String =
 }
 
 /// http://owensd.io/2015/06/19/xctest-missing-throws-testing.html
-func XCTAssertDoesThrow(_ fn: @autoclosure () throws -> (), message: String = ""/*, file: StaticString = #file, line: UInt = #line*/) {
+func XCTAssertDoesThrow(_ fn: @autoclosure () throws -> Void, message: String = ""/*, file: StaticString = #file, line: UInt = #line*/) {
     do {
         try fn()
         XCTFail(message/*, file: file, line: line*/)

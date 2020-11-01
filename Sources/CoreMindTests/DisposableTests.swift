@@ -8,7 +8,7 @@ import XCTest
 
 final class DisposableTests: XCTestCase {
 
-    var sut: Disposable? = nil
+    var sut: Disposable?
 
     func testShouldCallDisposeOnDeinit() {
 

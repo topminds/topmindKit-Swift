@@ -50,7 +50,6 @@ extension Data {
         return Data(bytes: hash, count: hash.count)
     }
 
-
     // MARK: - Internal
 
     var hex: String {
@@ -142,7 +141,6 @@ public struct HMAC {
             }
         }
     }
-
 
     // MARK: - Signing
 

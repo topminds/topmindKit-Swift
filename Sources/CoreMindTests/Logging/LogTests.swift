@@ -7,7 +7,7 @@ import XCTest
 @testable import CoreMind
 
 final class TestLogger: Logger {
-    typealias DidLog = (_ message: String, _ tag: Log.Tag?, _ level: Log.Level) -> ()
+    typealias DidLog = (_ message: String, _ tag: Log.Tag?, _ level: Log.Level) -> Void
     var didLog: DidLog?
     func log(message: String, tag: Log.Tag?, level: Log.Level) {
         didLog?(message, tag, level)
@@ -142,8 +142,7 @@ class LogTests: XCTestCase {
         XCTAssertEqual(formatted, "message")
     }
 
-
-    // Mark: Helper
+    // MARK: Helper
     func givenErrorLogger() {
         Log.addLogger(logger: sutError, level: .error)
     }
@@ -169,7 +168,7 @@ class LogTests: XCTestCase {
             exp.fulfill()
         }
     }
-    
+
     func givenNoLogExpectation(logger: TestLogger) {
         logger.didLog = { _, _, _ in
             XCTFail("Should not log!")

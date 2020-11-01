@@ -21,7 +21,7 @@ public struct SystemNetworkIndicator: NetworkActivityIndicator {
     private(set) public static var activityCounter: ActivityCount = 0
     /// Set this callback
     /// e.g. iOS: SystemNetworkIndicator.showIndicatorCallback = { UIApplication.shared.isNetworkActivityIndicatorVisible = $0 }
-    public static var showIndicatorCallback: ((Bool) -> ())?
+    public static var showIndicatorCallback: ((Bool) -> Void)?
 
     @discardableResult
     public static func startAnimating() -> ActivityCount {

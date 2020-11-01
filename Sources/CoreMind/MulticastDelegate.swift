@@ -67,7 +67,6 @@ public final class MulticastDelegate <T> {
         return count == 0
     }
 
-
     /// Initializer
     ///
     /// **Attention:** You are repsonsible to remove observers in .strong mode to avoid potential retain cycles.
@@ -95,7 +94,7 @@ public final class MulticastDelegate <T> {
     /// Invokes the given function with all registered delegates
     ///
     /// - Parameter invocation: The invocation function to process delegates
-    public func invoke(invocation: (T) -> ()) {
+    public func invoke(invocation: (T) -> Void) {
         delegates
             .allObjects
             .forEach {

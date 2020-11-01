@@ -7,7 +7,7 @@ import XCTest
 @testable import CoreMind
 
 class LoggerTests: XCTestCase {
-    
+
     // FIXME: how to test NSLog stream?
-    
+
 }

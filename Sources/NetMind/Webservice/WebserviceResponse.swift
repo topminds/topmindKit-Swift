@@ -10,9 +10,9 @@ public struct WebserviceResponse {
     public let statusCode: Int
     public let localizedStatusCodeString: String
     public let data: Data
-    public let allHeaderFields: [AnyHashable : Any]
+    public let allHeaderFields: [AnyHashable: Any]
 
-    public init(requestUrl: URL?, statusCode: Int, data: Data, allHeaderFields: [AnyHashable : Any]) {
+    public init(requestUrl: URL?, statusCode: Int, data: Data, allHeaderFields: [AnyHashable: Any]) {
         self.reqeustUrl = requestUrl
         self.statusCode = statusCode
         self.localizedStatusCodeString = HTTPURLResponse.localizedString(forStatusCode: statusCode)

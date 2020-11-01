@@ -44,7 +44,7 @@ public final class SeperatorView: UIView {
             super.draw(rect)
             return
         }
-        
+
         let scale = UIScreen.main.scale
         let lineWidth = 1.0 / scale
         var lineRect = CGRect.zero
@@ -65,7 +65,7 @@ public final class SeperatorView: UIView {
         context.setFillColor(tintColor.cgColor)
         context.fill(lineRect)
     }
-    
+
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         // never participate in the responder chain
         return false

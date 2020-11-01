@@ -6,26 +6,26 @@
 import Foundation
 
 public class RatingStore {
-    
+
     public enum Key: String {
         case firstAppLaunch = "firstAppLaunch"
         case appLaunches = "appLaunches"
         case lastPresentation = "lastPresentation"
         case lastInteraction = "lastInteraction"
-        
+
         fileprivate var rawValuePrefixed: String {
             return "eu.topmindKit.AppMind.RatingStore.\(rawValue)"
         }
-        
+
         fileprivate static let all: [Key] = [.firstAppLaunch, .appLaunches, .lastPresentation, .lastInteraction]
     }
-    
+
     fileprivate let userDefaults: UserDefaults
-    
+
     public init(userDefaults: UserDefaults) {
         self.userDefaults = userDefaults
     }
-    
+
     public func removeAll() {
         Key.all.forEach {
             userDefaults.removeObject(forKey: $0.rawValuePrefixed)

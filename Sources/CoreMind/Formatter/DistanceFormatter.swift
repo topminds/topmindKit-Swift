@@ -5,10 +5,10 @@
 import Foundation
 
 public final class DistanceFormatter: NumberFormatter {
-    
+
     private static let metersPerMile = 1609.344
     private static let feetPerMile = 5280.0
-    
+
     override public func string(from number: NSNumber) -> String? {
         if locale.usesMetricSystem {
             return super.string(from: configureMetric(for: number))
@@ -31,14 +31,14 @@ public final class DistanceFormatter: NumberFormatter {
                 positiveFormat = "#,###km"
             }
         }
-        
+
         considerNegativeDistance(for: number)
-        
+
         return NSNumber(value: value)
     }
 
     private func configureImperial(for number: NSNumber) -> NSNumber {
-        
+
         let value = abs(number.doubleValue) / DistanceFormatter.metersPerMile
 
         if value < 0.1 {
@@ -52,12 +52,12 @@ public final class DistanceFormatter: NumberFormatter {
             multiplier = 1
             positiveFormat = "#,###mi" // > 10mi
         }
-        
+
         considerNegativeDistance(for: number)
-        
+
         return NSNumber(value: value)
     }
-    
+
     private func considerNegativeDistance(for number: NSNumber) {
         if number.doubleValue < 0.0 {
             positivePrefix = negativePrefix

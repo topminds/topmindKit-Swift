@@ -13,7 +13,7 @@ final class ResultTests: XCTestCase {
 
         switch sut {
         case .success(let value): XCTAssertTrue(value)
-        case .failure(_): XCTFail()
+        case .failure: XCTFail()
         }
     }
 
@@ -21,10 +21,10 @@ final class ResultTests: XCTestCase {
         let sut = Swift.Result { try throwing() }
 
         switch sut {
-        case .success(_): XCTFail()
+        case .success: XCTFail()
         case .failure(let error): XCTAssertEqual(error as? String, "fixture throw")
         }
-    }    
+    }
 
     func testValueSuccess() {
         let sut = Swift.Result<String, String>.success("fixture")
@@ -71,7 +71,7 @@ final class ResultTests: XCTestCase {
 
         switch mapped {
         case .success(let value): XCTAssertTrue(value)
-        case .failure(_): XCTFail()
+        case .failure: XCTFail()
         }
     }
 
@@ -83,7 +83,7 @@ final class ResultTests: XCTestCase {
         }
 
         switch mapped {
-        case .success(_): XCTFail()
+        case .success: XCTFail()
         case .failure(let error): XCTAssertEqual(error as? String, "fixture nok")
         }
     }
@@ -97,7 +97,7 @@ final class ResultTests: XCTestCase {
 
         switch mapped {
         case .success(let value): XCTAssertTrue(value)
-        case .failure(_): XCTFail()
+        case .failure: XCTFail()
         }
     }
 
@@ -109,40 +109,40 @@ final class ResultTests: XCTestCase {
         }
 
         switch mapped {
-        case .success(_): XCTFail()
+        case .success: XCTFail()
         case .failure(let error): XCTAssertEqual(error as? String, "fixture nok")
         }
     }
-    
+
     func testDoubleNullWithBothNils() {
         let sut: Swift.Result<Any?, Error>? = Swift.Result(nil, nil)
-        
+
         XCTAssertNil(sut)
     }
-    
+
     func testDoubleNullWithValueAndError() {
         let sut: Swift.Result<Any?, Error>? = Swift.Result(0, "Error")
-        
+
         switch sut {
         case .failure(let error): XCTAssertEqual(error as? String, "Error")
         default:
             XCTFail("Result should be .failure(Double NULL)")
         }
     }
-    
+
     func testDoubleNullWithError() {
         let sut: Swift.Result<Any?, Error>? = Swift.Result(nil, "Error")
-        
+
         switch sut {
         case .failure(let error): XCTAssertEqual(error as? String, "Error")
         default:
             XCTFail("Result should be .failure(Double NULL)")
         }
     }
-    
+
     func testDoubleNullWithValue() {
         let sut: Swift.Result<Int?, Error>? = Swift.Result(0, nil)
-        
+
         switch sut {
         case .success(let value): XCTAssertEqual(value, 0)
         default:

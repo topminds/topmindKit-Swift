@@ -81,11 +81,11 @@ extension Keychain {
             if let group = accessGroup {
                 query[Attributes.accessGroup] = group as AnyObject?
             }
-            
+
             for (k, v) in attributes {
                 query[k] = v
             }
-            
+
             return query
         }
     }

@@ -16,21 +16,21 @@ class CoreDataTests: XCTestCase {
 
     var kittens: CoreDataFetcher<Kitten>!
     var stack: CoreDataStack?
-    
+
     static let kittenEntity: NSEntityDescription = {
         let entity = NSEntityDescription()
         entity.name = "Kitten"
         entity.managedObjectClassName = NSStringFromClass(Kitten.self)
-        
+
         let nameAttribute = NSAttributeDescription()
         nameAttribute.name = "name"
         nameAttribute.attributeType = .stringAttributeType
-        
+
         entity.properties = [ nameAttribute ]
-        
+
         return entity
     }()
-    
+
     static let model: NSManagedObjectModel = {
         let model = NSManagedObjectModel()
         model.entities = [ kittenEntity ]
@@ -81,6 +81,5 @@ class CoreDataTests: XCTestCase {
             return nil
         }
     }
-    
 
 }

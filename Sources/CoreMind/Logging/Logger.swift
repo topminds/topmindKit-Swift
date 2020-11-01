@@ -27,5 +27,5 @@ public struct ConsoleLogger: Logger {
     public func log(message: String, tag: Log.Tag?, level: Log.Level) {
         NSLog(formatLogMessage(message: message, tag: tag))
     }
-    
+
 }

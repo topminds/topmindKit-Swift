@@ -11,9 +11,9 @@ import Foundation
  */
 public final class Disposable {
 
-    private let dispose: () -> ()
+    private let dispose: () -> Void
 
-    init(_ dispose: @escaping () -> ()) {
+    init(_ dispose: @escaping () -> Void) {
         self.dispose = dispose
     }
 

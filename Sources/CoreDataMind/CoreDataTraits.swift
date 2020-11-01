@@ -5,7 +5,7 @@
 
 import CoreData
 
-public typealias SaveCompletion = (Error?) -> ()
+public typealias SaveCompletion = (Error?) -> Void
 
 public protocol CoreDataSavingTrait {
     func save(context: NSManagedObjectContext, rollbackOnError: Bool, completion: SaveCompletion?)

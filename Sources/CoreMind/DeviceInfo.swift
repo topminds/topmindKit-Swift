@@ -57,7 +57,6 @@ public struct DeviceInfo {
         return s.trimmingCharacters(in: .controlCharacters)
     }
 
-
     fileprivate static func sysctlWithName(_ name: String) -> String {
         var size = 0
         sysctlbyname(name, nil, &size, nil, 0)

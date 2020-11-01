@@ -101,21 +101,21 @@ public struct Keychain {
             throw error
         }
     }
-    
+
     public func updateOrRemove(string: String?, account: String) throws {
         guard let new = string else {
             try updateOrRemove(data: nil, account: account)
             return
         }
-        
+
         guard let data = new.data(using: .utf8) else {
             // conversion of Swift String to UTF8 cannot fail
             throw KeychainStatus.unableToDecodeProvidedData
         }
-        
+
         return try updateOrRemove(data: data, account: account)
     }
-    
+
     public func updateOrRemove(data: Data?, account: String) throws {
         let exists: Bool
         do {
@@ -126,7 +126,7 @@ public struct Keychain {
         } catch {
             throw error
         }
-        
+
         guard let new = data else {
             // remove if secret is nil
             if exists {
@@ -134,7 +134,7 @@ public struct Keychain {
             }
             return
         }
-        
+
         if exists {
             try change(secret: new, account: account)
         } else {

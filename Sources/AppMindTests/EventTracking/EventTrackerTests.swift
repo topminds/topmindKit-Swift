@@ -32,7 +32,7 @@ enum DummyEvent: Event {
         return "\(self)"
     }
 
-    var attributes: [String : Any] {
+    var attributes: [String: Any] {
         return [:]
     }
 }

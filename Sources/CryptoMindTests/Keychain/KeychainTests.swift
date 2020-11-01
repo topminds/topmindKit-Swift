@@ -21,7 +21,7 @@ extension Keychain {
 }
 
 final class KeychainTests: XCTestCase {
-    
+
     let secretData = "c00k!e".data(using: .utf8)
     let secretData2 = "c00k!e2".data(using: .utf8)
 
@@ -108,35 +108,35 @@ final class KeychainTests: XCTestCase {
             XCTFail("\(error)")
         }
     }
-    
+
     func testKeychainShouldSaveString() {
         do {
             try sut.updateOrRemove(string: "nomnomnom", account: "monster")
-            
+
             let value: String = try sut.secret(account: "monster")
             XCTAssertEqual("nomnomnom", value)
         } catch {
             XCTFail("\(error)")
         }
     }
-    
+
     func testKeychainShouldUpdateString() {
         do {
             try sut.save(secret: "c00k!e", account: "monster")
             try sut.updateOrRemove(string: "nomnomnom", account: "monster")
-            
+
             let value: String = try sut.secret(account: "monster")
             XCTAssertEqual("nomnomnom", value)
         } catch {
             XCTFail("\(error)")
         }
     }
-    
+
     func testKeychainShouldDeleteStringInsteadOfUpdate() {
         do {
             try sut.save(secret: "c00k!e", account: "monster")
             try sut.updateOrRemove(string: nil, account: "monster")
-            
+
             let _: String = try sut.secret(account: "nomnomnom")
             XCTFail("Should throw ItemNotFound")
         } catch let error as KeychainStatus {
@@ -145,6 +145,6 @@ final class KeychainTests: XCTestCase {
             XCTFail("\(error)")
         }
     }
-    
+
 }
 #endif

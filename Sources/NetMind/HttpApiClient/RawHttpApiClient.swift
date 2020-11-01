@@ -19,7 +19,7 @@ public final class RawHttpApiClient: HttpApiClient {
     public init(configuration: URLSessionConfiguration) {
         session = URLSession(configuration: configuration)
     }
-    
+
     public func get(url: URL) -> AnyPublisher<Data, HttpApiError> {
         send(call: .get(url))
     }

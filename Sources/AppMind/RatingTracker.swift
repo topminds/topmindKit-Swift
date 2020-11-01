@@ -71,5 +71,3 @@ extension RatingTracker {
         ratingStore[.lastInteraction] = Date().timeIntervalSince1970
     }
 }
-
-

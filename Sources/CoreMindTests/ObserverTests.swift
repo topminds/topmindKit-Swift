@@ -60,7 +60,7 @@ final class ObserverTests: XCTestCase {
 
         whenAddingObserverAgain()
 
-        XCTAssertEqual(sut.observers.count, 1)    
+        XCTAssertEqual(sut.observers.count, 1)
     }
 
     func testObserverRemoved() {
@@ -136,7 +136,7 @@ final class ObserverTests: XCTestCase {
         XCTAssertEqual(sut.observers.count, 1)
     }
 
-    // Mark: Helper
+    // MARK: Helper
 
     @discardableResult
     func givenObserving() -> DummyObserver {
@@ -159,7 +159,7 @@ final class ObserverTests: XCTestCase {
         }
         sut.remove(observer: observer)
     }
-    
+
     func whenChanging() {
         sut.magic()
     }

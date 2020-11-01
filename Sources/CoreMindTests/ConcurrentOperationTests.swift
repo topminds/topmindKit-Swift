@@ -125,4 +125,3 @@ final class ConcurrentOperationTests: XCTestCase {
         XCTAssertEqual(0, queue.operationCount)
     }
 }
-

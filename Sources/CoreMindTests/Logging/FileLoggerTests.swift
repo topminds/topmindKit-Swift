@@ -7,7 +7,7 @@ import XCTest
 @testable import CoreMind
 
 class FileLoggerTests: XCTestCase {
-    
+
     // TODO: Test FileLogger -> 100% coverage
-    
+
 }

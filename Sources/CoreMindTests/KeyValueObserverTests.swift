@@ -14,7 +14,7 @@ final class FixtureObject: NSObject {
 }
 
 final class KeyValueObserverTests: XCTestCase {
-    var sut: KeyValueObserver<String>? = nil
+    var sut: KeyValueObserver<String>?
 
     func testShouldReportChanges() {
         let object = FixtureObject()

@@ -35,7 +35,7 @@ final class MockWebserviceCaller: WebserviceCaller {
                 WebserviceResponse(requestUrl: request.url,
                                    statusCode: shouldResponseWith.0,
                                    data: try JSONEncoder().encode(shouldResponseWith.1),
-                                   allHeaderFields: [:])                
+                                   allHeaderFields: [:])
             }
 
             completion(result)

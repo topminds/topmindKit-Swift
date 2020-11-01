@@ -10,18 +10,18 @@ final class SystemNetworkIndicatorTests: XCTestCase {
 
     var callbackState = false
     var didCallCallback = 0
-    
+
     override func setUp() {
         didCallCallback = 0
         callbackState = false
-        
+
         SystemNetworkIndicator.showIndicatorCallback = {
             [weak self] in
             self?.callbackState = $0
             self?.didCallCallback += 1
         }
     }
-    
+
     override func tearDown() {
         super.tearDown()
         _ = SystemNetworkIndicator.reset()
@@ -44,15 +44,15 @@ final class SystemNetworkIndicatorTests: XCTestCase {
 
         didCallCallback = 0
         callbackState = false
-        
+
         XCTAssertEqual(SystemNetworkIndicator.stopAnimating(), 2)
         XCTAssertTrue(callbackState)
         XCTAssertEqual(1, didCallCallback)
-        
+
         XCTAssertEqual(SystemNetworkIndicator.stopAnimating(), 1)
         XCTAssertTrue(callbackState)
         XCTAssertEqual(2, didCallCallback)
-        
+
         XCTAssertEqual(SystemNetworkIndicator.stopAnimating(), 0)
         XCTAssertFalse(callbackState)
         XCTAssertEqual(3, didCallCallback)
@@ -60,18 +60,18 @@ final class SystemNetworkIndicatorTests: XCTestCase {
 
     func testIndicatorShouldNotTurnNegative() {
         givenActivities(count: 2)
-        
+
         didCallCallback = 0
         callbackState = false
 
         XCTAssertEqual(SystemNetworkIndicator.stopAnimating(), 1)
         XCTAssertTrue(callbackState)
         XCTAssertEqual(1, didCallCallback)
-        
+
         XCTAssertEqual(SystemNetworkIndicator.stopAnimating(), 0)
         XCTAssertFalse(callbackState)
         XCTAssertEqual(2, didCallCallback)
-        
+
         XCTAssertEqual(SystemNetworkIndicator.stopAnimating(), 0)
         XCTAssertFalse(callbackState)
         XCTAssertEqual(3, didCallCallback)
@@ -79,7 +79,7 @@ final class SystemNetworkIndicatorTests: XCTestCase {
 
     func testShouldReset() {
         givenActivities(count: 3)
-        
+
         didCallCallback = 0
         callbackState = false
 

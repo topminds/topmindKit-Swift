@@ -56,7 +56,7 @@ class CoreDataFetcherTests: CoreDataTests {
         let result = sut.first(attribute: "name", value: "Tom" as AnyObject)
         XCTAssertEqual(unwrapEntityResult(result), tom)
     }
-    
+
     func testFindByKeypath() {
         let result = sut.first(keyPath: \.name, value: "Tom" as AnyObject)
         XCTAssertEqual(unwrapEntityResult(result), tom)
@@ -66,7 +66,7 @@ class CoreDataFetcherTests: CoreDataTests {
         let result = sut.firstOrCreate(attribute: "name", value: "Tom" as AnyObject)
         XCTAssertEqual(unwrapEntityResult(result), tom)
     }
-    
+
     func testFindFirstByKeypathFinding() {
         let result = sut.firstOrCreate(keyPath: \.name, value: "Tom" as AnyObject)
         XCTAssertEqual(unwrapEntityResult(result), tom)
@@ -80,7 +80,7 @@ class CoreDataFetcherTests: CoreDataTests {
 
         XCTAssertEqual(kitty!.name, "Soft Kitty")
     }
-    
+
     func testFindFirstByKeypathCreating() {
         let result = sut.firstOrCreate(keyPath: \.name, value: "Soft Kitty" as AnyObject) {
             $0.name = "Soft Kitty"
@@ -107,7 +107,7 @@ class CoreDataFetcherTests: CoreDataTests {
         let kittenNames = unwrapCollectionResult(result).map { $0.name }
         XCTAssertEqual(["Tom", "Tom"], kittenNames)
     }
-    
+
     func testAllByKeypath() {
         _ = sut.create { $0.name = "Tom" }
         let result = sut.all(keyPath: \.name, value: "Tom" as AnyObject)
@@ -194,7 +194,6 @@ class CoreDataFetcherTests: CoreDataTests {
 
         XCTAssertEqual(0, self.unwrapCollectionResult(self.sut.all()).count)
     }
-
 
     func testBatchDelete() {
         let kittyName = "butch"
@@ -291,7 +290,7 @@ class CoreDataFetcherTests: CoreDataTests {
         _ = sut.create { $0.name = "Tom" }
 
         let expect = expectation(description: "fetcher callback")
-        sut.all(attribute:"name", value: "Tom" as AnyObject) {
+        sut.all(attribute: "name", value: "Tom" as AnyObject) {
             let kittenNames = self.unwrapCollectionResult($0).map { $0.name }
             XCTAssertEqual(["Tom", "Tom"], kittenNames)
             expect.fulfill()
