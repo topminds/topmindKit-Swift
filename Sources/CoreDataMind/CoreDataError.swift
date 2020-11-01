@@ -1,17 +1,14 @@
 //
-//  CoreDataError.swift
-//  CoreDataMind
-//
-//  Created by Martin Gratzer on 19.11.15.
-//  Copyright © 2016 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 import Foundation
 
 public enum CoreDataError: Error {
-    case persistenceStoreCreationFailed
-    case fileCreationFailed(file: String)
-    case entityNotFound(entity: String)
-    case entityDescriptionNotFound(entity: String)
-    case incorrectType(entity: String)
+	case persistenceStoreCreationFailed
+	case fileCreationFailed(file: String)
+	case entityNotFound(entity: String)
+	case entityDescriptionNotFound(entity: String)
+	case incorrectType(entity: String)
 }

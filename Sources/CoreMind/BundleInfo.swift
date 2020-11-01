@@ -1,24 +1,20 @@
 //
-//  BundleInfo.swift
-//  CoreMind
-//
-//  Created by Martin Gratzer on 22.01.19.
-//  Copyright © 2019 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 import Foundation
 
 public struct BundleInfo {
+	public let name: String
+	public let bundleIndentifier: String
+	public let version: String
+	public let build: String
 
-    public let name: String
-    public let bundleIndentifier: String
-    public let version: String
-    public let build: String
-
-    public init(bundle: Bundle) {
-        self.bundleIndentifier = bundle.identifier ?? "eu.topmind.unknown"
-        self.version = bundle.versionNumber ?? "0.0"
-        self.build = bundle.buildNumber ?? "0"
-        self.name = bundle.appName ?? "Unknown"
-    }
+	public init(bundle: Bundle) {
+		bundleIndentifier = bundle.identifier ?? "eu.topmind.unknown"
+		version = bundle.versionNumber ?? "0.0"
+		build = bundle.buildNumber ?? "0"
+		name = bundle.appName ?? "Unknown"
+	}
 }

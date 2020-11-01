@@ -1,29 +1,24 @@
 //
-//  Bundle+Extension.swift
-//  CoreMind
-//
-//  Created by Martin Gratzer on 22.01.19.
-//  Copyright © 2019 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 import Foundation
 
-extension Bundle {
+public extension Bundle {
+	var appName: String? {
+		infoDictionary?["CFBundleName"] as? String
+	}
 
-    public var appName: String? {
-        return infoDictionary?["CFBundleName"] as? String
-    }
+	var identifier: String? {
+		bundleIdentifier
+	}
 
-    public var identifier: String? {
-        return bundleIdentifier
-    }
+	var versionNumber: String? {
+		infoDictionary?["CFBundleShortVersionString"] as? String
+	}
 
-    public var versionNumber: String? {
-        return infoDictionary?["CFBundleShortVersionString"] as? String
-    }
-
-    public var buildNumber: String? {
-        return infoDictionary?["CFBundleVersion"] as? String
-    }
-
+	var buildNumber: String? {
+		infoDictionary?["CFBundleVersion"] as? String
+	}
 }

@@ -1,28 +1,25 @@
 //
-//  UIActivityIndicator+Loading.swift
-//  AppMind
-//
-//  Created by Raphael Seher on 07.01.19.
-//  Copyright © 2019 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 #if os(iOS)
-import UIKit
+	import UIKit
 
-extension UIActivityIndicatorView {
-    public var isLoading: Bool {
-        get {
-            return self.isAnimating
-        }
-        
-        set {
-            if newValue {
-                self.isHidden = false
-                self.startAnimating()
-            } else {
-                self.stopAnimating()
-            }
-        }
-    }
-}
+	public extension UIActivityIndicatorView {
+		var isLoading: Bool {
+			get {
+				isAnimating
+			}
+
+			set {
+				if newValue {
+					isHidden = false
+					startAnimating()
+				} else {
+					stopAnimating()
+				}
+			}
+		}
+	}
 #endif

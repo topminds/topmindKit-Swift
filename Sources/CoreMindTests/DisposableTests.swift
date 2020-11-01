@@ -1,24 +1,19 @@
 //
-//  DisposableTests.swift
-//  topmindKit
-//
-//  Created by Martin Gratzer on 28/05/2017.
-//  Copyright © 2017 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 @testable import CoreMind
+import XCTest
 
 final class DisposableTests: XCTestCase {
+	var sut: Disposable?
 
-    var sut: Disposable? = nil
+	func testShouldCallDisposeOnDeinit() {
+		let e = expectation(description: "testShouldCallDisposeOnDeinit")
+		sut = Disposable { e.fulfill() }
+		sut = nil
 
-    func testShouldCallDisposeOnDeinit() {
-
-        let e = expectation(description: "testShouldCallDisposeOnDeinit")
-        sut = Disposable { e.fulfill() }
-        sut = nil
-
-        waitForExpectations(timeout: 0, handler: nil)
-    }
+		waitForExpectations(timeout: 0, handler: nil)
+	}
 }

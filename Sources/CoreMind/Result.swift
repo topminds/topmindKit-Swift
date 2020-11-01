@@ -1,15 +1,12 @@
 //
-//  Result.swift
-//  topmindKit
-//
-//  Created by Martin Gratzer on 23/08/2016.
-//  Copyright © 2016 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 import Foundation
 
 /// Conform String to Error in order to use it for simpler error throwing
-extension String: Error { }
+extension String: Error {}
 
 /// The Result type either represents a success - which has an associated value
 /// representing the successful result - or a falure - whith an associated error.
@@ -20,72 +17,71 @@ extension String: Error { }
 // @available(*, deprecated, message: "Please use `Swift.Result`")
 public typealias Result<T> = Swift.Result<T, Error>
 
-// Mark: - Non throwing values
-extension Swift.Result {
-    /// Unwraps a Result without throwing
-    ///
-    /// - Returns: nil in case of an error, the value otherwise
-    public var value: Success? {
-        guard case .success(let value) = self else {
-            return nil
-        }
-        return value
-    }
+// MARK: - Non throwing values
 
-    /// Returns the error in case of failure, nil otherwise
-    public var error: Failure? {
-        guard case .failure(let error) = self else {
-            return nil
-        }
-        return error
-    }
+public extension Swift.Result {
+	/// Unwraps a Result without throwing
+	///
+	/// - Returns: nil in case of an error, the value otherwise
+	var value: Success? {
+		guard case let .success(value) = self else {
+			return nil
+		}
+		return value
+	}
 
-    /// Unwraps a Result
-    ///
-    /// - throws: a .failure error
-    /// usefull for result creation/transformation
-    /// Result { try result.resolve() }
-    ///
-    /// - returns: the value if it's a .Success or throw the error if it's a .Failure
-    public func resolve() throws -> Success {
-        switch self {
+	/// Returns the error in case of failure, nil otherwise
+	var error: Failure? {
+		guard case let .failure(error) = self else {
+			return nil
+		}
+		return error
+	}
 
-        case .success(let value):
-            return value
+	/// Unwraps a Result
+	///
+	/// - throws: a .failure error
+	/// usefull for result creation/transformation
+	/// Result { try result.resolve() }
+	///
+	/// - returns: the value if it's a .Success or throw the error if it's a .Failure
+	func resolve() throws -> Success {
+		switch self {
+		case let .success(value):
+			return value
 
-        case .failure(let error):
-            throw error
-            
-        }
-    }
-    
-    // MARK: - Double Null
-    
-    public init?(_ valueOrNil: Success?, _ errorOrNil: Failure?) {
-        if let error = errorOrNil {
-            self = .failure(error)
-            
-            if let value = valueOrNil {
-                logError("Result's value\(value) and error(\(error)) is set")
-            }
-        } else if let value = valueOrNil {
-            self = .success(value)
-        } else {
-            return nil
-        }
-    }
-    
-    public func mapThrowing<U>(_ f: (Success) throws -> U) -> Swift.Result<U, Error> {
-        switch self {
-        case .success(let result):
-            do {
-                let u = try f(result)
-                return .success(u)
-            } catch {
-                return .failure(error)
-            }
-        case .failure(let error):
-            return .failure(error)
-        }
-    }
+		case let .failure(error):
+			throw error
+		}
+	}
+
+	// MARK: - Double Null
+
+	init?(_ valueOrNil: Success?, _ errorOrNil: Failure?) {
+		if let error = errorOrNil {
+			self = .failure(error)
+
+			if let value = valueOrNil {
+				logError("Result's value\(value) and error(\(error)) is set")
+			}
+		} else if let value = valueOrNil {
+			self = .success(value)
+		} else {
+			return nil
+		}
+	}
+
+	func mapThrowing<U>(_ f: (Success) throws -> U) -> Swift.Result<U, Error> {
+		switch self {
+		case let .success(result):
+			do {
+				let u = try f(result)
+				return .success(u)
+			} catch {
+				return .failure(error)
+			}
+		case let .failure(error):
+			return .failure(error)
+		}
+	}
 }
