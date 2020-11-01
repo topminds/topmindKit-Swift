@@ -16,20 +16,17 @@ class CoreDataFetcherTests: CoreDataTests {
         sut = CoreDataFetcher<Kitten>(context: stack!.mainContext)
     }
 
-    func testCreateEntity() {
+    func testCreateEntity() throws {
         let result = sut.create { $0.name = "test" }
         switch result {
-            case .success(let kitten):
-                XCTAssertEqual(kitten.name, "test")
-
-            case .failure(let error):
+        case .success(let kitten):
+            XCTAssertEqual(kitten.name, "test")
+        case .failure(let error):
             XCTFail(error.localizedDescription)
         }
 
-        guard let _ = try? stack!.mainContext.save() else {
-            XCTFail()
-            return
-        }
+        XCTAssertNotNil(stack)
+        try stack?.mainContext.save()
     }
 
     func testCreateBuilder() {
@@ -136,21 +133,16 @@ class CoreDataFetcherTests: CoreDataTests {
 
     // MARK: - Async
 
-    func testDelete() {
+    func testDelete() throws {
         let kittyName = "butch"
-        guard let _ = createKittenWithName(kittyName) else {
-            return XCTFail()
+        guard createKittenWithName(kittyName) != nil else {
+            return XCTFail("Could not load mock data")
         }
 
         let predicate = NSPredicate(format: "name = %@", kittyName)
         let configuration = RequestConfig(predicate: predicate)
 
-        do {
-            try sut.delete(configuration: configuration)
-        } catch {
-            print("\(error)")
-            XCTFail()
-        }
+        try sut.delete(configuration: configuration)
 
         let result = sut.all(attribute: "name", value: kittyName as AnyObject)
         let kittenNames = unwrapCollectionResult(result).map { $0.name }
@@ -158,58 +150,38 @@ class CoreDataFetcherTests: CoreDataTests {
         XCTAssertEqual(kittenNames.count, 0)
     }
 
-    func testMultipleDelete() {
-        guard let _ = createKittenWithName("soft_kitty"), let _ = createKittenWithName("warm_kitty") else {
-            return XCTFail()
+    func testMultipleDelete() throws {
+        guard createKittenWithName("soft_kitty") != nil, createKittenWithName("warm_kitty") != nil else {
+            return XCTFail("Could not load mock data")
         }
 
-        do {
-            try sut.context.save()
-            XCTAssertEqual(4, self.unwrapCollectionResult(self.sut.all()).count)
-        } catch {
-            print("\(error)")
-            XCTFail()
-        }
+        try sut.context.save()
+        XCTAssertEqual(4, self.unwrapCollectionResult(self.sut.all()).count)
 
-        do {
-            let predicate = NSPredicate(format: "name = %@ OR name = %@", "soft_kitty", "warm_kitty")
-            let configuration = RequestConfig(predicate: predicate, includesPropertyValues: false)
-            try sut.delete(configuration: configuration)
-        } catch {
-            print("\(error)")
-            XCTFail()
-        }
+        let predicate = NSPredicate(format: "name = %@ OR name = %@", "soft_kitty", "warm_kitty")
+        let configuration = RequestConfig(predicate: predicate, includesPropertyValues: false)
+        try sut.delete(configuration: configuration)
 
         XCTAssertEqual(2, self.unwrapCollectionResult(self.sut.all()).count)
     }
 
-    func testBatchDeleteAll() {
-        do {
-            let configuration = RequestConfig(predicate: nil)
-            try sut.delete(configuration: configuration)
-        } catch {
-            print("\(error)")
-            XCTFail()
-        }
+    func testBatchDeleteAll() throws {
+        let configuration = RequestConfig(predicate: nil)
+        try sut.delete(configuration: configuration)
 
         XCTAssertEqual(0, self.unwrapCollectionResult(self.sut.all()).count)
     }
 
-    func testBatchDelete() {
+    func testBatchDelete() throws {
         let kittyName = "butch"
-        guard let _ = createKittenWithName(kittyName) else {
-            return XCTFail()
+        guard createKittenWithName(kittyName) != nil else {
+            return XCTFail("Could not load mock data")
         }
 
         let predicate = NSPredicate(format: "name = %@", kittyName)
         let configuration = RequestConfig(predicate: predicate)
 
-        do {
-            try sut.batchDelete(configuration: configuration)
-        } catch {
-            print("\(error)")
-            XCTFail()
-        }
+        try sut.batchDelete(configuration: configuration)
 
         let result = sut.all(attribute: "name", value: kittyName as AnyObject)
         let kittenNames = unwrapCollectionResult(result).map { $0.name }
@@ -217,39 +189,24 @@ class CoreDataFetcherTests: CoreDataTests {
         XCTAssertEqual(kittenNames.count, 0)
     }
 
-    func testBatchMultipleDelete() {
-        guard let _ = createKittenWithName("soft_kitty"), let _ = createKittenWithName("warm_kitty") else {
-            return XCTFail()
+    func testBatchMultipleDelete() throws {
+        guard createKittenWithName("soft_kitty") != nil, createKittenWithName("warm_kitty") != nil else {
+            return XCTFail("Could not load mock data")
         }
 
-        do {
-            try sut.context.save()
-            XCTAssertEqual(4, self.unwrapCollectionResult(self.sut.all()).count)
-        } catch {
-            print("\(error)")
-            XCTFail()
-        }
+        try sut.context.save()
+        XCTAssertEqual(4, self.unwrapCollectionResult(self.sut.all()).count)
 
-        do {
-            let predicate = NSPredicate(format: "name = %@ OR name = %@", "soft_kitty", "warm_kitty")
-            let configuration = RequestConfig(predicate: predicate, includesPropertyValues: false)
-            try sut.batchDelete(configuration: configuration)
-        } catch {
-            print("\(error)")
-            XCTFail()
-        }
+        let predicate = NSPredicate(format: "name = %@ OR name = %@", "soft_kitty", "warm_kitty")
+        let configuration = RequestConfig(predicate: predicate, includesPropertyValues: false)
+        try sut.batchDelete(configuration: configuration)
 
         XCTAssertEqual(2, self.unwrapCollectionResult(self.sut.all()).count)
     }
 
-    func testDeleteAll() {
-        do {
-            let configuration = RequestConfig(predicate: nil)
-            try sut.batchDelete(configuration: configuration)
-        } catch {
-            print("\(error)")
-            XCTFail()
-        }
+    func testDeleteAll() throws {
+        let configuration = RequestConfig(predicate: nil)
+        try sut.batchDelete(configuration: configuration)
 
         XCTAssertEqual(0, self.unwrapCollectionResult(self.sut.all()).count)
     }

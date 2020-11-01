@@ -9,7 +9,7 @@ import XCTest
 
 extension Keychain {
     func clean() {
-        for item in try! items(account: nil) ?? [] {
+        for item in (try? items(account: nil) ?? []) {
             guard let account = item[kSecAttrAccount as String] as? String else {
                 continue
             }

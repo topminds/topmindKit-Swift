@@ -13,7 +13,7 @@ final class ResultTests: XCTestCase {
 
         switch sut {
         case .success(let value): XCTAssertTrue(value)
-        case .failure: XCTFail()
+        case .failure: XCTFail("Result is expected to succeed")
         }
     }
 
@@ -21,7 +21,7 @@ final class ResultTests: XCTestCase {
         let sut = Swift.Result { try throwing() }
 
         switch sut {
-        case .success: XCTFail()
+        case .success: XCTFail("Result is epected to fail.")
         case .failure(let error): XCTAssertEqual(error as? String, "fixture throw")
         }
     }
@@ -56,7 +56,7 @@ final class ResultTests: XCTestCase {
         let sut: Swift.Result<String, Error> = Swift.Result.failure("fixture nok")
         do {
             _ = try sut.resolve()
-            XCTFail()
+            XCTFail("`resolve()` should fail")
         } catch {
             XCTAssertEqual(error as? String, "fixture nok")
         }
@@ -71,7 +71,7 @@ final class ResultTests: XCTestCase {
 
         switch mapped {
         case .success(let value): XCTAssertTrue(value)
-        case .failure: XCTFail()
+        case .failure: XCTFail("Result is expected to succeed")
         }
     }
 
@@ -83,7 +83,7 @@ final class ResultTests: XCTestCase {
         }
 
         switch mapped {
-        case .success: XCTFail()
+        case .success: XCTFail("Result is epected to fail.")
         case .failure(let error): XCTAssertEqual(error as? String, "fixture nok")
         }
     }
@@ -97,7 +97,7 @@ final class ResultTests: XCTestCase {
 
         switch mapped {
         case .success(let value): XCTAssertTrue(value)
-        case .failure: XCTFail()
+        case .failure: XCTFail("Result is expected to succeed")
         }
     }
 
@@ -109,7 +109,7 @@ final class ResultTests: XCTestCase {
         }
 
         switch mapped {
-        case .success: XCTFail()
+        case .success: XCTFail("Result is epected to fail.")
         case .failure(let error): XCTAssertEqual(error as? String, "fixture nok")
         }
     }

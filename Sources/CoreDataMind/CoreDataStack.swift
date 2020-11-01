@@ -174,7 +174,7 @@ private extension CoreDataStack {
             return url
         }
 
-        guard let _ = try? createDirectory(url) else {
+        guard (try? createDirectory(url)) != nil else {
             assertionFailure("Could not create directory at \(url)")
             return nil // nil URL is handled later, nothing we can ever do here
         }

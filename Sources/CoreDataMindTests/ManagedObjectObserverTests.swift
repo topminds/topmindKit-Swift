@@ -75,11 +75,8 @@ final class ManagedObjectObserverTests: CoreDataTests {
         let expect = expectation(description: "callback update")
 
         sut = ManagedObjectObserver(object: objectA, autoEnabled: false) { _ in
-            if objectA.name != "update 2" {
-                XCTFail()
-            } else {
-                expect.fulfill()
-            }
+            XCTAssertEqual("update 2", objectA.name)
+            expect.fulfill()
         }
 
         whenObjectIsUpdated(object: objectA, name: "update 1")
@@ -95,11 +92,8 @@ final class ManagedObjectObserverTests: CoreDataTests {
         let expect = expectation(description: "callback update")
 
         sut = ManagedObjectObserver(object: objectA, autoEnabled: false) { _ in
-            if objectA.name != "update 1" {
-                XCTFail()
-            } else {
-                expect.fulfill()
-            }
+            XCTAssertEqual("update 1", objectA.name)
+            expect.fulfill()
         }
 
         sut.enable()
@@ -116,11 +110,8 @@ final class ManagedObjectObserverTests: CoreDataTests {
         let expect = expectation(description: "callback update")
 
         sut = ManagedObjectObserver(object: objectA, autoEnabled: false) { _ in
-            if objectA.name != "update" {
-                XCTFail()
-            } else {
-                expect.fulfill()
-            }
+            XCTAssertEqual("update", objectA.name)
+            expect.fulfill()
         }
 
         sut.enable()
@@ -144,7 +135,7 @@ final class ManagedObjectObserverTests: CoreDataTests {
             object.name = name
             try object.managedObjectContext?.save()
         } catch {
-            XCTFail()
+            XCTFail("Could not save mock data")
         }
     }
 

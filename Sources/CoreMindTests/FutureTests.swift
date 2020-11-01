@@ -15,7 +15,7 @@ final class FutureTests: XCTestCase {
         sut.onResult {
             switch $0 {
             case .success(let value): XCTAssertEqual("fixture 1", value)
-            case .failure: XCTFail()
+            case .failure: XCTFail("Result is not expected to fail.")
             }
 
             e.fulfill()
@@ -31,7 +31,7 @@ final class FutureTests: XCTestCase {
         sut.onResult {
             switch $0 {
             case .success(let value): XCTAssertEqual("fixture 1", value)
-            case .failure: XCTFail()
+            case .failure: XCTFail("Result is not expected to fail.")
             }
 
             e.fulfill()
@@ -42,7 +42,7 @@ final class FutureTests: XCTestCase {
         sut.onResult {
             switch $0 {
             case .success(let value): XCTAssertEqual("fixture 1", value)
-            case .failure: XCTFail()
+            case .failure: XCTFail("Result is not expected to fail.")
             }
         }
     }
@@ -65,7 +65,7 @@ final class FutureTests: XCTestCase {
             .onResult {
                 switch $0 {
                 case .success(let value): XCTAssertEqual("fixture 3", value)
-                case .failure: XCTFail()
+                case .failure: XCTFail("Result is not expected to fail.")
                 }
 
                 e.fulfill()
@@ -80,7 +80,7 @@ final class FutureTests: XCTestCase {
         let e = expectation(description: "\(#function)")
         sut.onResult {
             switch $0 {
-            case .success: XCTFail()
+            case .success: XCTFail("Result is epected to fail")
             case .failure(let error): XCTAssertEqual("failed fixture 1", error as? String)
             }
 
@@ -107,7 +107,7 @@ final class FutureTests: XCTestCase {
             }
             .onResult {
                 switch $0 {
-                case .success: XCTFail()
+                case .success: XCTFail("Result is epected to fail")
                 case .failure(let error): XCTAssertEqual("failed fixture 1", error as? String)
                 }
 
@@ -134,7 +134,7 @@ final class FutureTests: XCTestCase {
             }
             .onResult {
                 switch $0 {
-                case .success: XCTFail()
+                case .success: XCTFail("Result is epected to fail")
                 case .failure(let error): XCTAssertEqual("failed fixture 2", error as? String)
                 }
 
@@ -161,7 +161,7 @@ final class FutureTests: XCTestCase {
             }
             .onResult {
                 switch $0 {
-                case .success: XCTFail()
+                case .success: XCTFail("Result is epected to fail")
                 case .failure(let error): XCTAssertEqual("failed fixture 3", error as? String)
                 }
 

@@ -43,7 +43,7 @@ final class SignalTests: XCTestCase {
         // don't save disposable -> subscription not fired
         _ = signal.subscribe {
             _ in
-            XCTFail()
+            XCTFail("callback is not expected")
         }
 
         sink(.success("fixture"))
@@ -85,7 +85,7 @@ final class SignalTests: XCTestCase {
                     self.recordFailure(withDescription: "\(v) != \(value)", inFile: file, atLine: Int(line), expected: false)
                 }
             case .failure:
-                XCTFail()
+                XCTFail("Signal should not fail")
                 self.recordFailure(withDescription: "Signal should not fail", inFile: file, atLine: Int(line), expected: false)
             }
 

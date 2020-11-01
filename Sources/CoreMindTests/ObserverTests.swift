@@ -154,7 +154,7 @@ final class ObserverTests: XCTestCase {
 
     func whenRemovingObserver() {
         guard let observer = observer else {
-            XCTFail()
+            XCTFail("`observer should not be null`")
             return
         }
         sut.remove(observer: observer)
@@ -177,7 +177,7 @@ final class ObserverTests: XCTestCase {
 
     func whenAddingObserverAgain() {
         guard let observer = observer else {
-            XCTFail()
+            XCTFail("`observer should not be null`")
             return
         }
         sut.add(observer: observer)

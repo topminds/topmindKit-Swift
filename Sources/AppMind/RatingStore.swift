@@ -8,10 +8,10 @@ import Foundation
 public class RatingStore {
 
     public enum Key: String {
-        case firstAppLaunch = "firstAppLaunch"
-        case appLaunches = "appLaunches"
-        case lastPresentation = "lastPresentation"
-        case lastInteraction = "lastInteraction"
+        case firstAppLaunch
+        case appLaunches
+        case lastPresentation
+        case lastInteraction
 
         fileprivate var rawValuePrefixed: String {
             return "eu.topmindKit.AppMind.RatingStore.\(rawValue)"

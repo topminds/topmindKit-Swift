@@ -16,12 +16,8 @@ struct Fixture2: Codable {
 
 final class JSONDataResultParsingTests: XCTestCase {
 
-    let jsonDataOk = try! JSONEncoder().encode(Fixture(name: "Fixture"))
-    let jsonDataOkList = try! JSONEncoder().encode([Fixture(name: "Fixture1"), Fixture(name: "Fixture2")])
-    let jsonDataNok = try! JSONEncoder().encode(Fixture2(name2: "Fixture2"))
-    let jsonDataNokList = try! JSONEncoder().encode([Fixture2(name2: "Fixture1"), Fixture2(name2: "Fixture2")])
-
-    func testResultTypeJsonParsing() {
+    func testResultTypeJsonParsing() throws {
+        let jsonDataOk = try JSONEncoder().encode(Fixture(name: "Fixture"))
         let result: Swift.Result<Data, Error> = .success(jsonDataOk)
         let parsed: Swift.Result<Fixture, Error> = result.parse()
 
@@ -30,7 +26,8 @@ final class JSONDataResultParsingTests: XCTestCase {
         }
     }
 
-    func testResultTypeListJsonParsing() {
+    func testResultTypeListJsonParsing() throws {
+        let jsonDataOkList = try JSONEncoder().encode([Fixture(name: "Fixture1"), Fixture(name: "Fixture2")])
         let result: Swift.Result<Data, Error> = .success(jsonDataOkList)
         let parsed: Swift.Result<[Fixture], Error> = result.parse()
 
@@ -39,7 +36,8 @@ final class JSONDataResultParsingTests: XCTestCase {
         }
     }
 
-    func testResultTypeJsonParsingThrows() {
+    func testResultTypeJsonParsingThrows() throws {
+        let jsonDataNok = try JSONEncoder().encode(Fixture2(name2: "Fixture2"))
         let result: Swift.Result<Data, Error> = .success(jsonDataNok)
         let parsed: Swift.Result<Fixture, Error> = result.parse()
 
@@ -48,7 +46,8 @@ final class JSONDataResultParsingTests: XCTestCase {
         }
     }
 
-    func testResultTypeListJsonParsingThrows() {
+    func testResultTypeListJsonParsingThrows() throws {
+        let jsonDataNokList = try JSONEncoder().encode([Fixture2(name2: "Fixture1"), Fixture2(name2: "Fixture2")])
         let result: Swift.Result<Data, Error> = .success(jsonDataNokList)
         let parsed: Swift.Result<[Fixture], Error> = result.parse()
 

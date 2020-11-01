@@ -40,7 +40,7 @@ final class KeyValueObserverTests: XCTestCase {
 
         sut = KeyValueObserver<String>(object: object, keyPath: #keyPath(FixtureObject.testProperty)) {
             _ in
-            XCTFail()
+            XCTFail("Callback should not be fired")
         }
 
         sut = nil

@@ -3,8 +3,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-// swiftlint:disable type_name
-
 import CoreData
 
 public func+(lhs: NSPredicate, rhs: NSPredicate) -> NSPredicate {

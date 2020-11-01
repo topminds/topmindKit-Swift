@@ -41,10 +41,6 @@ public final class KeyboardObserver {
         }
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     @objc
     private func handleNotification(_ notification: Notification) {
 

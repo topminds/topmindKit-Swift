@@ -207,7 +207,9 @@ public struct CoreDataFetcher<T: NSManagedObject> {
 
     @available(iOS 9.0, OSX 10.11, *)
     private func deleteRequest(configuration config: RequestConfig) -> NSBatchDeleteRequest {
+        // swiftlint:disable force_cast
         return NSBatchDeleteRequest(fetchRequest: fetchRequest(configuration: config) as! NSFetchRequest<NSFetchRequestResult>)
+        // swiftlint:enable force_cast
     }
 
     private func execute(_ config: RequestConfig) -> CollectionResult {

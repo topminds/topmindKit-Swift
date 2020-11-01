@@ -43,14 +43,14 @@ struct Dummy: Equatable, JSONDeserializable {
         }
     }
 
-    static func ==(lhs: Dummy, rhs: Dummy) -> Bool {
+    static func==(lhs: Dummy, rhs: Dummy) -> Bool {
         return lhs.name == rhs.name &&
             lhs.createdAt == rhs.createdAt &&
             lhs.url == rhs.url
     }
 }
 
-final class jsonTests: XCTestCase {
+final class JsonTests: XCTestCase {
 
     let date = Date(timeIntervalSince1970: 1474576117)
     let dummy = Dummy(name: "Fixture",
@@ -447,19 +447,14 @@ final class jsonTests: XCTestCase {
     }
 
     func testOptionalDeserializationWithMissingValue() throws {
-        do {
-            let json: [String: Any] = givenDummyPayload(optional: true)
+        let json: [String: Any] = givenDummyPayload(optional: true)
 
-            let dummy: Dummy = try json.decode()
+        let dummy: Dummy = try json.decode()
 
-            XCTAssertNotNil(dummy)
-            XCTAssertNil(dummy.nameOptional)
-            XCTAssertNil(dummy.createdAtOptional)
-            XCTAssertNil(dummy.url)
-        } catch {
-            print(error)
-            XCTFail()
-        }
+        XCTAssertNotNil(dummy)
+        XCTAssertNil(dummy.nameOptional)
+        XCTAssertNil(dummy.createdAtOptional)
+        XCTAssertNil(dummy.url)
     }
 
     func testObjectArrayDeserialization() throws {

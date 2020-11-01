@@ -63,7 +63,7 @@ class CoreDataTests: XCTestCase {
             do {
                 try FileManager.default.removeItem(at: storeUrl)
             } catch {
-                XCTFail()
+                XCTFail("Could not clean up")
             }
         }
         stack = nil
@@ -73,10 +73,10 @@ class CoreDataTests: XCTestCase {
     func createKittenWithName(_ name: String) -> Kitten? {
         let result = kittens.create { $0.name = name }
         switch result {
-            case .success(let kitten):
+        case .success(let kitten):
             return kitten
 
-            case .failure(let error):
+        case .failure(let error):
             XCTFail(error.localizedDescription)
             return nil
         }

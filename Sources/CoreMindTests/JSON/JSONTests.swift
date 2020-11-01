@@ -14,7 +14,7 @@ final class JSONTests: XCTestCase {
         if case .object(let value)? = sut {
             XCTAssertEqual("fixture 1", value["test"] as? String)
         } else {
-            XCTFail()
+            XCTFail("Incorrect case")
         }
     }
 
@@ -24,7 +24,7 @@ final class JSONTests: XCTestCase {
         if case .objects(let value)? = sut {
             XCTAssertEqual(2, value.count)
         } else {
-            XCTFail()
+            XCTFail("Incorrect case")
         }
     }
 
@@ -32,16 +32,16 @@ final class JSONTests: XCTestCase {
         let sut = try? JSON(json: [ "A", "B", "C" ])
 
         if case .array(let value)? = sut {
-            XCTAssertEqual([ "A", "B", "C" ], value as! [String])
+            XCTAssertEqual([ "A", "B", "C" ], value as? [String])
         } else {
-            XCTFail()
+            XCTFail("Incorrect case")
         }
     }
 
     func testInitInvalidValue() {
         do {
             _ = try JSON(json: NSNull())
-            XCTFail()
+            XCTFail("Parsing is expected to fail")
         } catch {
 
         }
@@ -53,7 +53,7 @@ final class JSONTests: XCTestCase {
         if case .object(let value)? = sut {
             XCTAssertEqual("fixture 1", value["test"] as? String)
         } else {
-            XCTFail()
+            XCTFail("Incorrect case")
         }
     }
 
@@ -64,26 +64,7 @@ final class JSONTests: XCTestCase {
         if case .object(let value)? = sut {
             XCTAssertEqual("fixture 1", value["test"] as? String)
         } else {
-            XCTFail()
+            XCTFail("Incorrect case")
         }
     }
-
-//    func testInitWithInputStream() {
-//
-//        let url = Bundle(for: JSONTests.classForCoder()).path(forResource: "inputStreamTest", ofType: "json")!
-//        let stream = InputStream(fileAtPath: url)!
-//        stream.open()
-//        defer {
-//            stream.close()
-//        }
-//
-//        let sut = try? JSON(stream: stream)
-//
-//        if case .object(let value)? = sut {
-//            XCTAssertEqual("fixture 1", value["test"] as? String)
-//        } else {
-//            XCTFail()
-//        }
-//    }
-
 }

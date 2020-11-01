@@ -8,8 +8,8 @@ import XCTest
 
 final class JSONParsingTests: XCTestCase {
 
-    func testSingleObjectParsing() {
-        let sut = try! JSON(json: [:])
+    func testSingleObjectParsing() throws {
+        let sut = try JSON(json: [:])
         let parsed: Swift.Result<ParseOk, Error> = sut.parse()
 
         if case .failure(let error) = parsed {
@@ -17,8 +17,8 @@ final class JSONParsingTests: XCTestCase {
         }
     }
 
-    func testSingleObjectParsingFails() {
-        let sut = try! JSON(json: [:])
+    func testSingleObjectParsingFails() throws {
+        let sut = try JSON(json: [:])
         let parsed: Swift.Result<ParseNok, Error> = sut.parse()
 
         if case .success = parsed {
@@ -26,8 +26,8 @@ final class JSONParsingTests: XCTestCase {
         }
     }
 
-    func testMultipleObjectsParsing() {
-        let sut = try! JSON(json: [[:], [:], [:]])
+    func testMultipleObjectsParsing() throws {
+        let sut = try JSON(json: [[:], [:], [:]])
         let parsed: Swift.Result<[ParseOk], Error> = sut.parse()
 
         if case .failure(let error) = parsed {
@@ -35,8 +35,8 @@ final class JSONParsingTests: XCTestCase {
         }
     }
 
-    func testMultipleObjectsParsingFails() {
-        let sut = try! JSON(json: [[:], [:], [:]])
+    func testMultipleObjectsParsingFails() throws {
+        let sut = try JSON(json: [[:], [:], [:]])
         let parsed: Swift.Result<[ParseNok], Error> = sut.parse()
 
         if case .success = parsed {
@@ -44,9 +44,9 @@ final class JSONParsingTests: XCTestCase {
         }
     }
 
-    func testDecodableObjectParsing() {
-        let jsonDataOk = try! JSONEncoder().encode(Fixture(name: "Fixture"))
-        let sut = try! JSON(data: jsonDataOk)
+    func testDecodableObjectParsing() throws {
+        let jsonDataOk = try JSONEncoder().encode(Fixture(name: "Fixture"))
+        let sut = try JSON(data: jsonDataOk)
         let parsed: Swift.Result<Fixture, Error> = sut.parse()
 
         if case .failure(let error) = parsed {
@@ -54,9 +54,9 @@ final class JSONParsingTests: XCTestCase {
         }
     }
 
-    func testMultipleDecodableObjectParsing() {
-        let jsonDataOkList = try! JSONEncoder().encode([Fixture(name: "Fixture1"), Fixture(name: "Fixture2")])
-        let sut = try! JSON(data: jsonDataOkList)
+    func testMultipleDecodableObjectParsing() throws {
+        let jsonDataOkList = try JSONEncoder().encode([Fixture(name: "Fixture1"), Fixture(name: "Fixture2")])
+        let sut = try JSON(data: jsonDataOkList)
         let parsed: Swift.Result<[Fixture], Error> = sut.parseList()
 
         if case .failure(let error) = parsed {

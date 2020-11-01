@@ -23,30 +23,30 @@ final class RatingStoreTests: XCTestCase {
 
     func testFirstAppLaunch() {
         sut[.firstAppLaunch] = 1
-        XCTAssertEqual(sut[.firstAppLaunch] as! Int, 1)
+        XCTAssertEqual(sut[.firstAppLaunch] as? Int, 1)
         sut = RatingStore(userDefaults: UserDefaults.standard)
-        XCTAssertEqual(sut[.firstAppLaunch] as! Int, 1)
+        XCTAssertEqual(sut[.firstAppLaunch] as? Int, 1)
     }
 
     func testAppLaunches() {
         sut[.appLaunches] = 2
-        XCTAssertEqual(sut[.appLaunches] as! Int, 2)
+        XCTAssertEqual(sut[.appLaunches] as? Int, 2)
         sut = RatingStore(userDefaults: UserDefaults.standard)
-        XCTAssertEqual(sut[.appLaunches] as! Int, 2)
+        XCTAssertEqual(sut[.appLaunches] as? Int, 2)
     }
 
     func testLastPresentation() {
         sut[.lastPresentation] = 3
-        XCTAssertEqual(sut[.lastPresentation] as! Int, 3)
+        XCTAssertEqual(sut[.lastPresentation] as? Int, 3)
         sut = RatingStore(userDefaults: UserDefaults.standard)
-        XCTAssertEqual(sut[.lastPresentation] as! Int, 3)
+        XCTAssertEqual(sut[.lastPresentation] as? Int, 3)
     }
 
     func testLastInteraction() {
         sut[.lastInteraction] = 4
-        XCTAssertEqual(sut[.lastInteraction] as! Int, 4)
+        XCTAssertEqual(sut[.lastInteraction] as? Int, 4)
         sut = RatingStore(userDefaults: UserDefaults.standard)
-        XCTAssertEqual(sut[.lastInteraction] as! Int, 4)
+        XCTAssertEqual(sut[.lastInteraction] as? Int, 4)
     }
 
     func testRemoveAll() {

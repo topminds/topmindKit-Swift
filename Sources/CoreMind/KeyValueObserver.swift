@@ -39,6 +39,7 @@ public final class KeyValueObserver<T>: NSObject {
         object.removeObserver(self, forKeyPath: keyPath)
     }
 
+    // swiftlint:disable block_based_kvo
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard keyPath == self.keyPath,
             context == &self.context else {
@@ -54,4 +55,5 @@ public final class KeyValueObserver<T>: NSObject {
 
         callback(KeyValueChange(old: oldValue, new: newValue))
     }
+
 }

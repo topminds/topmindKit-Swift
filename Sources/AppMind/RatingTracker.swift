@@ -15,10 +15,10 @@ public class RatingTracker {
     fileprivate let ratingStore: RatingStore
 
     public init(timeSinceFirstAppLaunch: TimeInterval,
-         numberOfAppLaunches: UInt,
-         timeBetweenPresentations: TimeInterval,
-         timeBetweenInteractions: TimeInterval,
-         ratingStore: RatingStore) {
+                numberOfAppLaunches: UInt,
+                timeBetweenPresentations: TimeInterval,
+                timeBetweenInteractions: TimeInterval,
+                ratingStore: RatingStore) {
 
         self.timeSinceFirstAppLaunch = abs(timeSinceFirstAppLaunch)
         self.numberOfAppLaunches = numberOfAppLaunches

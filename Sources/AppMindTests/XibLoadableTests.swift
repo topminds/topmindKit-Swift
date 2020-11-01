@@ -92,7 +92,7 @@ extension XibLoadableTests: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let dummy: DummyCell = tableView.dequeueCell(for: indexPath) else {
-            XCTFail()
+            XCTFail("Could not load dummy cell")
             return UITableViewCell()
         }
         return dummy
@@ -110,7 +110,7 @@ extension XibLoadableTests: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let dummy: DummyCVCell = collectionView.dequeueCell(for: indexPath) else {
-            XCTFail()
+            XCTFail("Could not load dummy cell")
             return UICollectionViewCell()
         }
         return dummy
