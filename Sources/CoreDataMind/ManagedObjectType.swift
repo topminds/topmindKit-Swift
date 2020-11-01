@@ -6,13 +6,11 @@
 import Foundation
 
 public protocol ManagedObjectType {
-    static var defaultSortDescriptors: [NSSortDescriptor] { get }
+	static var defaultSortDescriptors: [NSSortDescriptor] { get }
 }
 
 public extension ManagedObjectType {
-
-    static var defaultSortDescriptors: [NSSortDescriptor] {
-        return []
-    }
-
+	static var defaultSortDescriptors: [NSSortDescriptor] {
+		[]
+	}
 }

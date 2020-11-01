@@ -5,46 +5,45 @@
 
 // swiftlint:disable variable_name
 
-import Foundation
 import CommonCrypto
+import Foundation
 
-extension String {
+public extension String {
+	var md2: String? {
+		hashData?.md2.hex
+	}
 
-    public var md2: String? {
-        return hashData?.md2.hex
-    }
+	var md4: String? {
+		hashData?.md4.hex
+	}
 
-    public var md4: String? {
-        return hashData?.md4.hex
-    }
+	var md5: String? {
+		hashData?.md5.hex
+	}
 
-    public var md5: String? {
-        return hashData?.md5.hex
-    }
+	var sha1: String? {
+		hashData?.sha1.hex
+	}
 
-    public var sha1: String? {
-        return hashData?.sha1.hex
-    }
+	var sha224: String? {
+		hashData?.sha224.hex
+	}
 
-    public var sha224: String? {
-        return hashData?.sha224.hex
-    }
+	var sha256: String? {
+		hashData?.sha256.hex
+	}
 
-    public var sha256: String? {
-        return hashData?.sha256.hex
-    }
+	var sha384: String? {
+		hashData?.sha384.hex
+	}
 
-    public var sha384: String? {
-        return hashData?.sha384.hex
-    }
+	var sha512: String? {
+		hashData?.sha512.hex
+	}
 
-    public var sha512: String? {
-        return hashData?.sha512.hex
-    }
+	// MARK: - Private
 
-    // MARK: - Private
-
-    private var hashData: Data? {
-        return data(using: .utf8)
-    }
+	private var hashData: Data? {
+		data(using: .utf8)
+	}
 }

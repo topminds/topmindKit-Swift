@@ -6,54 +6,51 @@
 import Foundation
 
 public struct KeyValueChange<T> {
-    public let old: T
-    public let new: T
+	public let old: T
+	public let new: T
 }
 
 /**
  Disposable for Objective-C's KVO
  */
 public final class KeyValueObserver<T>: NSObject {
+	public let keyPath: String
+	public let object: NSObject
 
-    public let keyPath: String
-    public let object: NSObject
+	private var context = 0
+	private let callback: (KeyValueChange<T>) -> Void
 
-    private var context = 0
-    private let callback: (KeyValueChange<T>) -> Void
+	public init(object: NSObject, keyPath: String, callback: @escaping (KeyValueChange<T>) -> Void) {
+		assert(object.value(forKeyPath: keyPath) is T,
+		       "Incorrect observation type `\(T.self)` for keypath `\(keyPath)` on object of class `\(NSStringFromClass(object.classForCoder))`.")
 
-    public init(object: NSObject, keyPath: String, callback: @escaping (KeyValueChange<T>) -> Void) {
+		self.object = object
+		self.keyPath = keyPath
+		self.callback = callback
 
-        assert(object.value(forKeyPath: keyPath) is T,
-               "Incorrect observation type `\(T.self)` for keypath `\(keyPath)` on object of class `\(NSStringFromClass(object.classForCoder))`.")
+		super.init()
 
-        self.object = object
-        self.keyPath = keyPath
-        self.callback = callback
+		object.addObserver(self, forKeyPath: keyPath, options: [.new, .old], context: &context)
+	}
 
-        super.init()
+	deinit {
+		object.removeObserver(self, forKeyPath: keyPath)
+	}
 
-        object.addObserver(self, forKeyPath: keyPath, options: [.new, .old], context: &context)
-    }
+	// swiftlint:disable block_based_kvo
+	override public func observeValue(forKeyPath keyPath: String?, of _: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+		guard keyPath == self.keyPath,
+		      context == &self.context else {
+			assertionFailure("Incorrect observer target.")
+			return
+		}
 
-    deinit {
-        object.removeObserver(self, forKeyPath: keyPath)
-    }
+		guard let oldValue = change?[.oldKey] as? T,
+		      let newValue = change?[.newKey] as? T else {
+			logWarning("Incorrect observation type `\(T.self)` for keypath `\(self.keyPath)` on object of type `\(NSStringFromClass(object.classForCoder))`.", tag: "KeyValueObserver")
+			return
+		}
 
-    // swiftlint:disable block_based_kvo
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        guard keyPath == self.keyPath,
-            context == &self.context else {
-            assertionFailure("Incorrect observer target.")
-            return
-        }
-
-        guard let oldValue = change?[.oldKey] as? T,
-            let newValue = change?[.newKey] as? T else {
-                logWarning("Incorrect observation type `\(T.self)` for keypath `\(self.keyPath)` on object of type `\(NSStringFromClass(self.object.classForCoder))`.", tag: "KeyValueObserver")
-                return
-        }
-
-        callback(KeyValueChange(old: oldValue, new: newValue))
-    }
-
+		callback(KeyValueChange(old: oldValue, new: newValue))
+	}
 }

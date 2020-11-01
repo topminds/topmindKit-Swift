@@ -5,6 +5,6 @@
 
 import Foundation
 
-public protocol LandscapeSupporting: class {
-    var landscapeEnabled: Bool { get }
+public protocol LandscapeSupporting: AnyObject {
+	var landscapeEnabled: Bool { get }
 }

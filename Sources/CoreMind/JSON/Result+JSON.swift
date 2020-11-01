@@ -5,43 +5,42 @@
 
 import Foundation
 
-extension Swift.Result {
+public extension Swift.Result {
+	func parse<U: JSONDeserializable>() -> Swift.Result<U, Error>
+		where Success == JSONObject {
+		Swift.Result<U, Error> {
+			let json = try resolve()
+			return try U(json: json)
+		}
+	}
 
-    public func parse<U: JSONDeserializable>() -> Swift.Result<U, Error>
-        where Success == JSONObject {
-            return Swift.Result<U, Error> {
-                let json = try resolve()
-                return try U(json: json)
-            }
-    }
+	func parse<U: JSONDeserializable>(key: String) -> Swift.Result<[U], Error>
+		where Success == JSONObject {
+		Swift.Result<[U], Error> {
+			let json = try resolve()
+			guard let list = json[key] as? [JSONObject] else {
+				throw "Incorrect JSON Type `\(self)`"
+			}
+			return try list.map { try U(json: $0) }
+		}
+	}
 
-    public func parse<U: JSONDeserializable>(key: String) -> Swift.Result<[U], Error>
-        where Success == JSONObject {
-            return Swift.Result<[U], Error> {
-                let json = try resolve()
-                guard let list = json[key] as? [JSONObject] else {
-                    throw "Incorrect JSON Type `\(self)`"
-                }
-                return try list.map { try U(json: $0) }
-            }
-    }
+	func parse<U>(key: String) -> Swift.Result<[U], Error>
+		where Success == JSONObject {
+		Swift.Result<[U], Error> {
+			let json = try resolve()
+			guard let list = json[key] as? [U] else {
+				throw "Incorrect JSON Type `\(self)`"
+			}
+			return list
+		}
+	}
 
-    public func parse<U>(key: String) -> Swift.Result<[U], Error>
-        where Success == JSONObject {
-            return Swift.Result<[U], Error> {
-                 let json = try resolve()
-                guard let list = json[key] as? [U] else {
-                    throw "Incorrect JSON Type `\(self)`"
-                }
-                return list
-            }
-    }
-
-    public func parse<U: JSONDeserializable>() -> Swift.Result<[U], Error>
-        where Success == [JSONObject] {
-            return Swift.Result<[U], Error> {
-                let list = try resolve()
-                return try list.map { try U(json: $0) }
-            }
-    }
+	func parse<U: JSONDeserializable>() -> Swift.Result<[U], Error>
+		where Success == [JSONObject] {
+		Swift.Result<[U], Error> {
+			let list = try resolve()
+			return try list.map { try U(json: $0) }
+		}
+	}
 }

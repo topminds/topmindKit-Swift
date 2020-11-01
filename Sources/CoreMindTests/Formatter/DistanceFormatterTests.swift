@@ -3,186 +3,185 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 @testable import CoreMind
+import XCTest
 
 final class DistanceFormatterTests: XCTestCase {
+	var sut: DistanceFormatter!
+	var string: String?
 
-    var sut: DistanceFormatter!
-    var string: String?
+	override func setUp() {
+		super.setUp()
+		sut = DistanceFormatter()
+	}
 
-    override func setUp() {
-        super.setUp()
-        sut = DistanceFormatter()
-    }
+	func testPrefixResetNegativeToPositive() {
+		givenMetricFormatter()
 
-    func testPrefixResetNegativeToPositive() {
-        givenMetricFormatter()
+		whenFormatting(meters: -999)
+		whenFormatting(meters: 999)
 
-        whenFormatting(meters: -999)
-        whenFormatting(meters: 999)
+		XCTAssertEqual("999m", string)
+	}
 
-        XCTAssertEqual("999m", string)
-    }
+	func testPrefixResetPositiveToNegative() {
+		givenMetricFormatter()
 
-    func testPrefixResetPositiveToNegative() {
-        givenMetricFormatter()
+		whenFormatting(meters: 999)
+		whenFormatting(meters: -999)
 
-        whenFormatting(meters: 999)
-        whenFormatting(meters: -999)
+		XCTAssertEqual("-999m", string)
+	}
 
-        XCTAssertEqual("-999m", string)
-    }
+	// MARK: Positive
 
-    // MARk: Positive
+	func testMetricBelow1kmPositive() {
+		givenMetricFormatter()
 
-    func testMetricBelow1kmPositive() {
-        givenMetricFormatter()
+		whenFormatting(meters: 999)
 
-        whenFormatting(meters: 999)
+		XCTAssertEqual("999m", string)
+	}
 
-        XCTAssertEqual("999m", string)
-    }
+	func testMetricBetween1kmAnd10kmPositive() {
+		givenMetricFormatter()
 
-    func testMetricBetween1kmAnd10kmPositive() {
-        givenMetricFormatter()
+		whenFormatting(meters: 5555.555)
 
-        whenFormatting(meters: 5555.555)
+		XCTAssertEqual("5,6km", string)
+	}
 
-        XCTAssertEqual("5,6km", string)
-    }
+	func testMetricBeyond10kmPositive() {
+		givenMetricFormatter()
 
-    func testMetricBeyond10kmPositive() {
-        givenMetricFormatter()
+		whenFormatting(meters: 15555.555)
 
-        whenFormatting(meters: 15555.555)
+		XCTAssertEqual("16km", string)
+	}
 
-        XCTAssertEqual("16km", string)
-    }
+	func testImperialBelow1kmPositive() {
+		givenImperialFormatter()
 
-    func testImperialBelow1kmPositive() {
-        givenImperialFormatter()
+		whenFormatting(meters: 50)
 
-        whenFormatting(meters: 50)
+		XCTAssertEqual("164ft", string)
+	}
 
-        XCTAssertEqual("164ft", string)
-    }
+	func testImperialBetween1kmAnd10kmPositive() {
+		givenImperialFormatter()
 
-    func testImperialBetween1kmAnd10kmPositive() {
-        givenImperialFormatter()
+		whenFormatting(meters: 5555.555)
 
-        whenFormatting(meters: 5555.555)
+		XCTAssertEqual("3.5mi", string)
+	}
 
-        XCTAssertEqual("3.5mi", string)
-    }
+	func testImperialBeyond10kmPositive() {
+		givenImperialFormatter()
 
-    func testImperialBeyond10kmPositive() {
-        givenImperialFormatter()
+		whenFormatting(meters: 55555.555)
 
-        whenFormatting(meters: 55555.555)
+		XCTAssertEqual("35mi", string)
+	}
 
-        XCTAssertEqual("35mi", string)
-    }
+	// MARK: Negative
 
-    // MARk: Negative
+	func testMetricBelow1kmNegative() {
+		givenMetricFormatter()
 
-    func testMetricBelow1kmNegative() {
-        givenMetricFormatter()
+		whenFormatting(meters: -999)
 
-        whenFormatting(meters: -999)
+		XCTAssertEqual("-999m", string)
+	}
 
-        XCTAssertEqual("-999m", string)
-    }
+	func testMetricBetween1kmAnd10kmNegative() {
+		givenMetricFormatter()
 
-    func testMetricBetween1kmAnd10kmNegative() {
-        givenMetricFormatter()
+		whenFormatting(meters: -5555.555)
 
-        whenFormatting(meters: -5555.555)
+		XCTAssertEqual("-5,6km", string)
+	}
 
-        XCTAssertEqual("-5,6km", string)
-    }
+	func testMetricBeyond10kmNegative() {
+		givenMetricFormatter()
 
-    func testMetricBeyond10kmNegative() {
-        givenMetricFormatter()
+		whenFormatting(meters: -15555.555)
 
-        whenFormatting(meters: -15555.555)
+		XCTAssertEqual("-16km", string)
+	}
 
-        XCTAssertEqual("-16km", string)
-    }
+	func testImperialBelow1kmNegative() {
+		givenImperialFormatter()
 
-    func testImperialBelow1kmNegative() {
-        givenImperialFormatter()
+		whenFormatting(meters: -50)
 
-        whenFormatting(meters: -50)
+		XCTAssertEqual("-164ft", string)
+	}
 
-        XCTAssertEqual("-164ft", string)
-    }
+	func testImperialBetween1kmAnd10kmNegative() {
+		givenImperialFormatter()
 
-    func testImperialBetween1kmAnd10kmNegative() {
-        givenImperialFormatter()
+		whenFormatting(meters: -5555.555)
 
-        whenFormatting(meters: -5555.555)
+		XCTAssertEqual("-3.5mi", string)
+	}
 
-        XCTAssertEqual("-3.5mi", string)
-    }
+	func testImperialBeyond10kmNegative() {
+		givenImperialFormatter()
 
-    func testImperialBeyond10kmNegative() {
-        givenImperialFormatter()
+		whenFormatting(meters: -55555.555)
 
-        whenFormatting(meters: -55555.555)
+		XCTAssertEqual("-35mi", string)
+	}
 
-        XCTAssertEqual("-35mi", string)
-    }
+	func testFormatterMultiplierResetMetric() {
+		givenMetricFormatter()
 
-    func testFormatterMultiplierResetMetric() {
-        givenMetricFormatter()
+		whenFormatting(meters: 500)
+		XCTAssertEqual("500m", string)
 
-        whenFormatting(meters: 500)
-        XCTAssertEqual("500m", string)
+		whenFormatting(meters: 5555.555)
+		XCTAssertEqual("5,6km", string)
 
-        whenFormatting(meters: 5555.555)
-        XCTAssertEqual("5,6km", string)
+		whenFormatting(meters: 500)
+		XCTAssertEqual("500m", string)
 
-        whenFormatting(meters: 500)
-        XCTAssertEqual("500m", string)
+		whenFormatting(meters: 15555.555)
+		XCTAssertEqual("16km", string)
 
-        whenFormatting(meters: 15555.555)
-        XCTAssertEqual("16km", string)
+		whenFormatting(meters: 500)
+		XCTAssertEqual("500m", string)
+	}
 
-        whenFormatting(meters: 500)
-        XCTAssertEqual("500m", string)
-    }
+	func testFormatterMultiplierResetImperial() {
+		givenImperialFormatter()
 
-    func testFormatterMultiplierResetImperial() {
-        givenImperialFormatter()
+		whenFormatting(meters: 50)
+		XCTAssertEqual("164ft", string)
 
-        whenFormatting(meters: 50)
-        XCTAssertEqual("164ft", string)
+		whenFormatting(meters: 5555.555)
+		XCTAssertEqual("3.5mi", string)
 
-        whenFormatting(meters: 5555.555)
-        XCTAssertEqual("3.5mi", string)
+		whenFormatting(meters: 50)
+		XCTAssertEqual("164ft", string)
 
-        whenFormatting(meters: 50)
-        XCTAssertEqual("164ft", string)
+		whenFormatting(meters: 55555.555)
+		XCTAssertEqual("35mi", string)
 
-        whenFormatting(meters: 55555.555)
-        XCTAssertEqual("35mi", string)
+		whenFormatting(meters: 50)
+		XCTAssertEqual("164ft", string)
+	}
 
-        whenFormatting(meters: 50)
-        XCTAssertEqual("164ft", string)
-    }
+	// MARK: Helper
 
-    // MARK: Helper
+	func givenMetricFormatter() {
+		sut.locale = Locale(identifier: "de_AT")
+	}
 
-    func givenMetricFormatter() {
-        sut.locale = Locale(identifier: "de_AT")
-    }
+	func givenImperialFormatter() {
+		sut.locale = Locale(identifier: "en_US")
+	}
 
-    func givenImperialFormatter() {
-        sut.locale = Locale(identifier: "en_US")
-    }
-
-    func whenFormatting(meters: Double) {
-        string = sut.string(from: NSNumber(value: meters))
-    }
+	func whenFormatting(meters: Double) {
+		string = sut.string(from: NSNumber(value: meters))
+	}
 }

@@ -3,17 +3,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 @testable import CoreMind
+import XCTest
 
 struct ParseOk: JSONDeserializable {
-    init(json: JSONObject) throws {
-
-    }
+	init(json _: JSONObject) throws {}
 }
 
 struct ParseNok: JSONDeserializable {
-    init(json: JSONObject) throws {
-        throw "nok"
-    }
+	init(json _: JSONObject) throws {
+		throw "nok"
+	}
 }

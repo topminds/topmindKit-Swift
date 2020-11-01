@@ -5,19 +5,18 @@
 
 import Foundation
 
-extension Swift.Result {
+public extension Swift.Result {
+	func parse<U: Decodable>() -> Swift.Result<U, Error> where Success == Data {
+		Swift.Result<U, Error> {
+			let jsonData = try resolve()
+			return try JSONDecoder().decode(U.self, from: jsonData)
+		}
+	}
 
-    public func parse<U: Decodable>() -> Swift.Result<U, Error> where Success == Data {
-        return Swift.Result<U, Error> {
-            let jsonData = try resolve()
-            return try JSONDecoder().decode(U.self, from: jsonData)
-        }
-    }
-
-    public func parse<U: Decodable>(key: String) -> Swift.Result<[U], Error> where Success == Data {
-        return Swift.Result<[U], Error> {
-            let jsonData = try resolve()
-            return try JSONDecoder().decode([U].self, from: jsonData)
-        }
-    }
+	func parse<U: Decodable>(key _: String) -> Swift.Result<[U], Error> where Success == Data {
+		Swift.Result<[U], Error> {
+			let jsonData = try resolve()
+			return try JSONDecoder().decode([U].self, from: jsonData)
+		}
+	}
 }
