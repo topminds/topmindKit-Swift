@@ -1,9 +1,6 @@
 //
-//  SeperatorView.swift
-//  topmindKit
-//
-//  Created by Denis Andrasec on 09/10/2016.
-//  Copyright © 2016 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 #if os(iOS)

@@ -1,9 +1,6 @@
 //
-//  MulticastDelegate.swift
-//  CoreMind
-//
-//  Created by Martin Gratzer on 10.05.18.
-//  Copyright © 2018 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 import Foundation

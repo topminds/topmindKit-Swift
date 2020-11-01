@@ -1,11 +1,7 @@
 //
-//  String+CommonCrypto.swift
-//  topmindKit
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
-//  Created by Martin Gratzer on 10/12/2016.
-//  Copyright © 2016 topmind mobile app solutions. All rights reserved.
-//
-//  Credits to https://github.com/soffes/Crypto
 
 // swiftlint:disable variable_name
 

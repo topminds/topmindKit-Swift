@@ -1,9 +1,6 @@
 //
-//  KeyboardObserverTest.swift
-//  CoreMindTests
-//
-//  Created by Raphael Seher on 21.12.18.
-//  Copyright © 2018 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 #if os(iOS)

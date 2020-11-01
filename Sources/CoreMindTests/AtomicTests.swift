@@ -1,11 +1,7 @@
 //
-//  AtomicTests.swift
-//  topmindKit
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
-//  Created by Martin Gratzer on 28/05/2017.
-//  Copyright © 2017 topmind mobile app solutions. All rights reserved.
-//
-
 import XCTest
 @testable import CoreMind
 

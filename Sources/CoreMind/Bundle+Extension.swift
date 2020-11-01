@@ -1,9 +1,6 @@
 //
-//  Bundle+Extension.swift
-//  CoreMind
-//
-//  Created by Martin Gratzer on 22.01.19.
-//  Copyright © 2019 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 import Foundation
