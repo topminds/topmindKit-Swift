@@ -8,8 +8,9 @@ import XCTest
 @testable import CryptoMind
 
 extension Keychain {
-    func clean() {
-        for item in (try? items(account: nil) ?? []) {
+    func clean() throws {
+        let items = try self.items(account: nil) ?? []
+        for item in items {
             guard let account = item[kSecAttrAccount as String] as? String else {
                 continue
             }
@@ -29,12 +30,16 @@ final class KeychainTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // clean keychain
-        sut.clean()
+        do {
+            // clean keychain
+            try sut.clean()
+        } catch { }
     }
 
     override class func tearDown() {
-        Keychain(service: "eu.topmind.topmindKit.CryptoMind", accessGroup: nil, synchronizable: false).clean()
+        do {
+            try Keychain(service: "eu.topmind.topmindKit.CryptoMind", accessGroup: nil, synchronizable: false).clean()
+        } catch { }
         super.tearDown()
     }
 
