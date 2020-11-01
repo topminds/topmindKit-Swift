@@ -3,11 +3,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 @testable import CoreMind
+import XCTest
 
 class LoggerTests: XCTestCase {
-    
-    // FIXME: how to test NSLog stream?
-    
+	// FIXME: how to test NSLog stream?
 }

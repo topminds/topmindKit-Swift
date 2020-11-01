@@ -3,84 +3,81 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 import CoreData
 @testable import CoreDataMind
+import XCTest
 
 @objc(Kitten)
 class Kitten: NSManagedObject {
-    @NSManaged var name: String
+	@NSManaged var name: String
 }
 
 class CoreDataTests: XCTestCase {
+	var kittens: CoreDataFetcher<Kitten>!
+	var stack: CoreDataStack?
 
-    var kittens: CoreDataFetcher<Kitten>!
-    var stack: CoreDataStack?
-    
-    static let kittenEntity: NSEntityDescription = {
-        let entity = NSEntityDescription()
-        entity.name = "Kitten"
-        entity.managedObjectClassName = NSStringFromClass(Kitten.self)
-        
-        let nameAttribute = NSAttributeDescription()
-        nameAttribute.name = "name"
-        nameAttribute.attributeType = .stringAttributeType
-        
-        entity.properties = [ nameAttribute ]
-        
-        return entity
-    }()
-    
-    static let model: NSManagedObjectModel = {
-        let model = NSManagedObjectModel()
-        model.entities = [ kittenEntity ]
-        return model
-    }()
+	static let kittenEntity: NSEntityDescription = {
+		let entity = NSEntityDescription()
+		entity.name = "Kitten"
+		entity.managedObjectClassName = NSStringFromClass(Kitten.self)
 
-    var tom: Kitten?
-    var jerry: Kitten? // technically a mouse, but serves the purpose for now
+		let nameAttribute = NSAttributeDescription()
+		nameAttribute.name = "name"
+		nameAttribute.attributeType = .stringAttributeType
 
-    override func setUp() {
-        super.setUp()
-        let expect = expectation(description: "store init")
-        stack = CoreDataStack(type: .sqlite, model: CoreDataTests.model) { _ in
-            expect.fulfill()
-        }
-        waitForExpectations(timeout: 5, handler: nil)
+		entity.properties = [nameAttribute]
 
-        let context = stack!.mainContext
+		return entity
+	}()
 
-        kittens = CoreDataFetcher<Kitten>(context: context)
+	static let model: NSManagedObjectModel = {
+		let model = NSManagedObjectModel()
+		model.entities = [kittenEntity]
+		return model
+	}()
 
-        tom = createKittenWithName("Tom")
-        jerry = createKittenWithName("Jerry")
+	var tom: Kitten?
+	var jerry: Kitten? // technically a mouse, but serves the purpose for now
 
-        XCTAssertDoesNotThrow(stack!.save(context: context, completion: { _ in }))
-    }
+	override func setUp() {
+		super.setUp()
+		let expect = expectation(description: "store init")
+		stack = CoreDataStack(type: .sqlite, model: CoreDataTests.model) { _ in
+			expect.fulfill()
+		}
+		waitForExpectations(timeout: 5, handler: nil)
 
-    override func tearDown() {
-        if let storeUrl = stack?.storeURL {
-            do {
-                try FileManager.default.removeItem(at: storeUrl)
-            } catch {
-                XCTFail()
-            }
-        }
-        stack = nil
-        super.tearDown()
-    }
+		let context = stack!.mainContext
 
-    func createKittenWithName(_ name: String) -> Kitten? {
-        let result = kittens.create { $0.name = name }
-        switch result {
-            case .success(let kitten):
-            return kitten
+		kittens = CoreDataFetcher<Kitten>(context: context)
 
-            case .failure(let error):
-            XCTFail(error.localizedDescription)
-            return nil
-        }
-    }
-    
+		tom = createKittenWithName("Tom")
+		jerry = createKittenWithName("Jerry")
 
+		XCTAssertDoesNotThrow(stack!.save(context: context, completion: { _ in }))
+	}
+
+	override func tearDown() {
+		if let storeUrl = stack?.storeURL {
+			do {
+				try FileManager.default.removeItem(at: storeUrl)
+			} catch {
+				XCTFail("Could not clean up")
+			}
+		}
+		stack = nil
+		super.tearDown()
+	}
+
+	func createKittenWithName(_ name: String) -> Kitten? {
+		let result = kittens.create { $0.name = name }
+		switch result {
+		case let .success(kitten):
+			return kitten
+
+		case let .failure(error):
+			XCTFail(error.localizedDescription)
+			return nil
+		}
+	}
 }

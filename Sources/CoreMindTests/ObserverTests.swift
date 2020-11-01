@@ -6,180 +6,176 @@
 //  Copyright © 2016 topmind mobile app solutions. All rights reserved.
 //
 
-import XCTest
 @testable import CoreMind
+import XCTest
 
 protocol DummyObserverType: Observer {
-    func dummyDidChange()
+	func dummyDidChange()
 }
 
 final class DummyObservable: Observable {
-    typealias ObserverType = DummyObserverType
-    var weakObservers = [WeakBox]()
+	typealias ObserverType = DummyObserverType
+	var weakObservers = [WeakBox]()
 
-    func magic() {
-        observers.forEach {
-            $0.dummyDidChange()
-        }
-    }
+	func magic() {
+		observers.forEach {
+			$0.dummyDidChange()
+		}
+	}
 }
 
 final class DummyObserver: DummyObserverType {
-    private(set) var numberOfdidChangeCalls = 0
-    func dummyDidChange() {
-        numberOfdidChangeCalls += 1
-    }
+	private(set) var numberOfdidChangeCalls = 0
+	func dummyDidChange() {
+		numberOfdidChangeCalls += 1
+	}
 }
 
-final class DummyObserver2: Observer {
-
-}
+final class DummyObserver2: Observer {}
 
 final class ObserverTests: XCTestCase {
+	var observer: DummyObserver?
+	var sut: DummyObservable!
 
-    var observer: DummyObserver?
-    var sut: DummyObservable!
+	override func setUp() {
+		super.setUp()
+		sut = DummyObservable()
+	}
 
-    override func setUp() {
-        super.setUp()
-        sut = DummyObservable()
+	func testObserverCalled() {
+		givenObserving()
 
-    }
+		whenChanging()
+		whenChanging()
 
-    func testObserverCalled() {
-        givenObserving()
+		XCTAssertEqual(observer?.numberOfdidChangeCalls, 2)
+	}
 
-        whenChanging()
-        whenChanging()
+	func testObserverShouldOnlyGetAddedOnce() {
+		givenObserving()
 
-        XCTAssertEqual(observer?.numberOfdidChangeCalls, 2)
-    }
+		whenAddingObserverAgain()
 
-    func testObserverShouldOnlyGetAddedOnce() {
-        givenObserving()
+		XCTAssertEqual(sut.observers.count, 1)
+	}
 
-        whenAddingObserverAgain()
+	func testObserverRemoved() {
+		givenObserving()
 
-        XCTAssertEqual(sut.observers.count, 1)    
-    }
+		whenRemovingObserver()
 
-    func testObserverRemoved() {
-        givenObserving()
+		XCTAssertTrue(sut.observers.isEmpty)
+		XCTAssertTrue(sut.weakObservers.isEmpty)
+	}
 
-        whenRemovingObserver()
+	func testCleanReleasedObserver() {
+		givenObserving()
 
-        XCTAssertTrue(sut.observers.isEmpty)
-        XCTAssertTrue(sut.weakObservers.isEmpty)
-    }
+		whenObserverIsReleased()
+		whenChanging()
 
-    func testCleanReleasedObserver() {
-        givenObserving()
+		XCTAssertTrue(sut.observers.isEmpty)
+	}
 
-        whenObserverIsReleased()
-        whenChanging()
+	func testShouldRemoveReleasedObserversOnAdd() {
+		givenObserving() // +1
 
-        XCTAssertTrue(sut.observers.isEmpty)
-    }
+		whenAddingObserver() // +1
+		whenAddingObserver() // +1
 
-    func testShouldRemoveReleasedObserversOnAdd() {
-        givenObserving() // +1
+		let needToHoldRef = whenAddingObserver() // -1 +1
 
-        whenAddingObserver() // +1
-        whenAddingObserver() // +1
+		XCTAssertEqual(sut.observers.count, 2)
+		XCTAssertEqual(sut.weakObservers.count, 2)
+		XCTAssertTrue(sut.observers.contains(where: {
+			needToHoldRef === $0
+		}))
+		XCTAssertTrue(sut.observers.contains(where: {
+			observer === $0
+		}))
+	}
 
-        let needToHoldRef = whenAddingObserver() // -1 +1
+	func testShouldRemoveReleasedObserversOnRemove() {
+		givenObserving() // +1
+		whenAddingObserver() // +1
+		whenAddingObserver() // +1
 
-        XCTAssertEqual(sut.observers.count, 2)
-        XCTAssertEqual(sut.weakObservers.count, 2)
-        XCTAssertTrue(sut.observers.contains(where: {
-            needToHoldRef === $0
-        }))
-        XCTAssertTrue(sut.observers.contains(where: {
-            observer === $0
-        }))
-    }
+		whenRemovingObserver()
 
-    func testShouldRemoveReleasedObserversOnRemove() {
-        givenObserving() // +1
-        whenAddingObserver() // +1
-        whenAddingObserver() // +1
+		XCTAssertEqual(sut.observers.count, 0)
+		XCTAssertEqual(sut.weakObservers.count, 0)
+	}
 
-        whenRemovingObserver()
+	func testAddMultipleObservers() {
+		let obs1 = givenObserving()
+		let obs2 = givenObserving()
 
-        XCTAssertEqual(sut.observers.count, 0)
-        XCTAssertEqual(sut.weakObservers.count, 0)
-    }
+		whenChanging()
 
-    func testAddMultipleObservers() {
-        let obs1 = givenObserving()
-        let obs2 = givenObserving()
+		XCTAssertEqual(obs1.numberOfdidChangeCalls, 1)
+		XCTAssertEqual(obs2.numberOfdidChangeCalls, 1)
+	}
 
-        whenChanging()
+	func testShouldNotAddIncorrectObserverType() {
+		givenIncorrectObserverType()
 
-        XCTAssertEqual(obs1.numberOfdidChangeCalls, 1)
-        XCTAssertEqual(obs2.numberOfdidChangeCalls, 1)
-    }
+		XCTAssertTrue(sut.observers.isEmpty)
+		XCTAssertTrue(sut.weakObservers.isEmpty)
+	}
 
-    func testShouldNotAddIncorrectObserverType() {
-        givenIncorrectObserverType()
+	func testRemoveNonExistingObserverShouldBeIgnored() {
+		givenObserving()
 
-        XCTAssertTrue(sut.observers.isEmpty)
-        XCTAssertTrue(sut.weakObservers.isEmpty)
-    }
+		let unknownObserver = DummyObserver()
+		sut.remove(observer: unknownObserver)
 
-    func testRemoveNonExistingObserverShouldBeIgnored() {
-        givenObserving()
+		XCTAssertEqual(sut.observers.count, 1)
+	}
 
-        let unknownObserver = DummyObserver()
-        sut.remove(observer: unknownObserver)
+	// MARK: Helper
 
-        XCTAssertEqual(sut.observers.count, 1)
-    }
+	@discardableResult
+	func givenObserving() -> DummyObserver {
+		let observer = whenAddingObserver()
+		self.observer = observer
+		return observer
+	}
 
-    // Mark: Helper
+	@discardableResult
+	func givenIncorrectObserverType() -> DummyObserver2 {
+		let observer = DummyObserver2()
+		sut.add(observer: observer)
+		return observer
+	}
 
-    @discardableResult
-    func givenObserving() -> DummyObserver {
-        let observer = whenAddingObserver()
-        self.observer = observer
-        return observer
-    }
+	func whenRemovingObserver() {
+		guard let observer = observer else {
+			XCTFail("`observer should not be null`")
+			return
+		}
+		sut.remove(observer: observer)
+	}
 
-    @discardableResult
-    func givenIncorrectObserverType() -> DummyObserver2 {
-        let observer = DummyObserver2()
-        sut.add(observer: observer)
-        return observer
-    }
+	func whenChanging() {
+		sut.magic()
+	}
 
-    func whenRemovingObserver() {
-        guard let observer = observer else {
-            XCTFail()
-            return
-        }
-        sut.remove(observer: observer)
-    }
-    
-    func whenChanging() {
-        sut.magic()
-    }
+	func whenObserverIsReleased() {
+		observer = nil
+	}
 
-    func whenObserverIsReleased() {
-        observer = nil
-    }
+	@discardableResult
+	func whenAddingObserver() -> DummyObserver {
+		let observer = DummyObserver()
+		sut.add(observer: observer)
+		return observer
+	}
 
-    @discardableResult
-    func whenAddingObserver() -> DummyObserver {
-        let observer = DummyObserver()
-        sut.add(observer: observer)
-        return observer
-    }
-
-    func whenAddingObserverAgain() {
-        guard let observer = observer else {
-            XCTFail()
-            return
-        }
-        sut.add(observer: observer)
-    }
+	func whenAddingObserverAgain() {
+		guard let observer = observer else {
+			XCTFail("`observer should not be null`")
+			return
+		}
+		sut.add(observer: observer)
+	}
 }

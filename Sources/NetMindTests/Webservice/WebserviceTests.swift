@@ -3,9 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 @testable import NetMind
+import XCTest
 
-final class WebserviceTests: XCTestCase {
-    
-}
+final class WebserviceTests: XCTestCase {}

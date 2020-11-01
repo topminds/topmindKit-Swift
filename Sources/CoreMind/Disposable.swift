@@ -10,14 +10,13 @@ import Foundation
 
  */
 public final class Disposable {
+	private let dispose: () -> Void
 
-    private let dispose: () -> ()
+	init(_ dispose: @escaping () -> Void) {
+		self.dispose = dispose
+	}
 
-    init(_ dispose: @escaping () -> ()) {
-        self.dispose = dispose
-    }
-
-    deinit {
-        dispose()
-    }
+	deinit {
+		dispose()
+	}
 }

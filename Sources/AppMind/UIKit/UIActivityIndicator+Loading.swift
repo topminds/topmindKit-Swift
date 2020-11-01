@@ -4,22 +4,22 @@
 //
 
 #if os(iOS)
-import UIKit
+	import UIKit
 
-extension UIActivityIndicatorView {
-    public var isLoading: Bool {
-        get {
-            return self.isAnimating
-        }
-        
-        set {
-            if newValue {
-                self.isHidden = false
-                self.startAnimating()
-            } else {
-                self.stopAnimating()
-            }
-        }
-    }
-}
+	public extension UIActivityIndicatorView {
+		var isLoading: Bool {
+			get {
+				isAnimating
+			}
+
+			set {
+				if newValue {
+					isHidden = false
+					startAnimating()
+				} else {
+					stopAnimating()
+				}
+			}
+		}
+	}
 #endif

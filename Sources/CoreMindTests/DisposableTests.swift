@@ -3,19 +3,17 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 @testable import CoreMind
+import XCTest
 
 final class DisposableTests: XCTestCase {
+	var sut: Disposable?
 
-    var sut: Disposable? = nil
+	func testShouldCallDisposeOnDeinit() {
+		let e = expectation(description: "testShouldCallDisposeOnDeinit")
+		sut = Disposable { e.fulfill() }
+		sut = nil
 
-    func testShouldCallDisposeOnDeinit() {
-
-        let e = expectation(description: "testShouldCallDisposeOnDeinit")
-        sut = Disposable { e.fulfill() }
-        sut = nil
-
-        waitForExpectations(timeout: 0, handler: nil)
-    }
+		waitForExpectations(timeout: 0, handler: nil)
+	}
 }

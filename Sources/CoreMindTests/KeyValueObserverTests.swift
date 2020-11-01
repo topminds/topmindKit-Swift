@@ -3,48 +3,47 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 @testable import CoreMind
+import XCTest
 
 final class FixtureObject: NSObject {
-    @objc var testProperty: String = "initial_fixture" {
-        willSet { willChangeValue(forKey: "testProperty") }
-        didSet { didChangeValue(forKey: "testProperty") }
-    }
+	@objc var testProperty: String = "initial_fixture" {
+		willSet { willChangeValue(forKey: "testProperty") }
+		didSet { didChangeValue(forKey: "testProperty") }
+	}
 }
 
 final class KeyValueObserverTests: XCTestCase {
-    var sut: KeyValueObserver<String>? = nil
+	var sut: KeyValueObserver<String>?
 
-    func testShouldReportChanges() {
-        let object = FixtureObject()
+	func testShouldReportChanges() {
+		let object = FixtureObject()
 
-        let e = expectation(description: "testShouldReportChanges")
-        sut = KeyValueObserver<String>(object: object, keyPath: #keyPath(FixtureObject.testProperty)) {
-            change in
+		let e = expectation(description: "testShouldReportChanges")
+		sut = KeyValueObserver<String>(object: object, keyPath: #keyPath(FixtureObject.testProperty)) {
+			change in
 
-            XCTAssertEqual("initial_fixture", change.old)
-            XCTAssertEqual("new_fixture", change.new)
+			XCTAssertEqual("initial_fixture", change.old)
+			XCTAssertEqual("new_fixture", change.new)
 
-            e.fulfill()
-        }
+			e.fulfill()
+		}
 
-        object.testProperty = "new_fixture"
+		object.testProperty = "new_fixture"
 
-        waitForExpectations(timeout: 0, handler: nil)
+		waitForExpectations(timeout: 0, handler: nil)
+	}
 
-    }
+	func testShouldUnregisterOnDispose() {
+		let object = FixtureObject()
 
-    func testShouldUnregisterOnDispose() {
-        let object = FixtureObject()
+		sut = KeyValueObserver<String>(object: object, keyPath: #keyPath(FixtureObject.testProperty)) {
+			_ in
+			XCTFail("Callback should not be fired")
+		}
 
-        sut = KeyValueObserver<String>(object: object, keyPath: #keyPath(FixtureObject.testProperty)) {
-            _ in
-            XCTFail()
-        }
+		sut = nil
 
-        sut = nil
-
-        object.testProperty = "new_fixture"
-    }
+		object.testProperty = "new_fixture"
+	}
 }

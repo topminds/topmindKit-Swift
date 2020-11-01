@@ -3,87 +3,65 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 @testable import CoreMind
+import XCTest
 
 final class JSONTests: XCTestCase {
+	func testInitWithObject() {
+		let sut = try? JSON(json: ["test": "fixture 1"])
 
-    func testInitWithObject() {
-        let sut = try? JSON(json: [ "test": "fixture 1" ])
+		if case let .object(value)? = sut {
+			XCTAssertEqual("fixture 1", value["test"] as? String)
+		} else {
+			XCTFail("Incorrect case")
+		}
+	}
 
-        if case .object(let value)? = sut {
-            XCTAssertEqual("fixture 1", value["test"] as? String)
-        } else {
-            XCTFail()
-        }
-    }
+	func testInitWithObjects() {
+		let sut = try? JSON(json: [["test": "fixture 1"], ["test": "fixture 2"]])
 
-    func testInitWithObjects() {
-        let sut = try? JSON(json: [ ["test": "fixture 1"], ["test": "fixture 2"] ])
+		if case let .objects(value)? = sut {
+			XCTAssertEqual(2, value.count)
+		} else {
+			XCTFail("Incorrect case")
+		}
+	}
 
-        if case .objects(let value)? = sut {
-            XCTAssertEqual(2, value.count)
-        } else {
-            XCTFail()
-        }
-    }
+	func testInitWithArray() {
+		let sut = try? JSON(json: ["A", "B", "C"])
 
-    func testInitWithArray() {
-        let sut = try? JSON(json: [ "A", "B", "C" ])
+		if case let .array(value)? = sut {
+			XCTAssertEqual(["A", "B", "C"], value as? [String])
+		} else {
+			XCTFail("Incorrect case")
+		}
+	}
 
-        if case .array(let value)? = sut {
-            XCTAssertEqual([ "A", "B", "C" ], value as! [String])
-        } else {
-            XCTFail()
-        }
-    }
+	func testInitInvalidValue() {
+		do {
+			_ = try JSON(json: NSNull())
+			XCTFail("Parsing is expected to fail")
+		} catch {}
+	}
 
-    func testInitInvalidValue() {
-        do {
-            _ = try JSON(json: NSNull())
-            XCTFail()
-        } catch {
+	func testInitWithString() {
+		let sut = try? JSON(string: "{\"test\": \"fixture 1\"}")
 
-        }
-    }
+		if case let .object(value)? = sut {
+			XCTAssertEqual("fixture 1", value["test"] as? String)
+		} else {
+			XCTFail("Incorrect case")
+		}
+	}
 
-    func testInitWithString() {
-        let sut = try? JSON(string: "{\"test\": \"fixture 1\"}")
+	func testInitWithData() {
+		let data = "{\"test\": \"fixture 1\"}".data(using: .utf8)!
+		let sut = try? JSON(data: data)
 
-        if case .object(let value)? = sut {
-            XCTAssertEqual("fixture 1", value["test"] as? String)
-        } else {
-            XCTFail()
-        }
-    }
-
-    func testInitWithData() {
-        let data = "{\"test\": \"fixture 1\"}".data(using: .utf8)!
-        let sut = try? JSON(data: data)
-
-        if case .object(let value)? = sut {
-            XCTAssertEqual("fixture 1", value["test"] as? String)
-        } else {
-            XCTFail()
-        }
-    }
-
-//    func testInitWithInputStream() {
-//
-//        let url = Bundle(for: JSONTests.classForCoder()).path(forResource: "inputStreamTest", ofType: "json")!
-//        let stream = InputStream(fileAtPath: url)!
-//        stream.open()
-//        defer {
-//            stream.close()
-//        }
-//
-//        let sut = try? JSON(stream: stream)
-//
-//        if case .object(let value)? = sut {
-//            XCTAssertEqual("fixture 1", value["test"] as? String)
-//        } else {
-//            XCTFail()
-//        }
-//    }
-
+		if case let .object(value)? = sut {
+			XCTAssertEqual("fixture 1", value["test"] as? String)
+		} else {
+			XCTFail("Incorrect case")
+		}
+	}
 }

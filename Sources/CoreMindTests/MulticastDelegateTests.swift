@@ -3,181 +3,177 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import XCTest
 @testable import CoreMind
+import XCTest
 
-protocol MultiCastMockObserver: class {
-    func dummyDidChange()
+protocol MultiCastMockObserver: AnyObject {
+	func dummyDidChange()
 }
 
 final class MultiCastMock {
+	var observers = MulticastDelegate<MultiCastMockObserver>()
 
-    var observers = MulticastDelegate<MultiCastMockObserver>()
+	func invokeObservers() {
+		observers.invoke {
+			$0.dummyDidChange()
+		}
+	}
 
-    func invokeObservers() {
-        observers.invoke {
-            $0.dummyDidChange()
-        }
-    }
+	func add(observer: MultiCastMockObserver) {
+		observers += observer
+	}
 
-    func add(observer: MultiCastMockObserver) {
-        observers += observer
-    }
-
-    func remove(observer: MultiCastMockObserver) {
-        observers -= observer
-    }
+	func remove(observer: MultiCastMockObserver) {
+		observers -= observer
+	}
 }
 
 final class MulticastObserverMock: MultiCastMockObserver {
-    private(set) var numberOfdidChangeCalls = 0
-    func dummyDidChange() {
-        numberOfdidChangeCalls += 1
-    }
+	private(set) var numberOfdidChangeCalls = 0
+	func dummyDidChange() {
+		numberOfdidChangeCalls += 1
+	}
 }
 
 final class MulticastDelegateTests: XCTestCase {
+	var observer: MulticastObserverMock?
+	var sut: MultiCastMock!
 
-    var observer: MulticastObserverMock?
-    var sut: MultiCastMock!
+	override func setUp() {
+		super.setUp()
+		sut = MultiCastMock()
+	}
 
-    override func setUp() {
-        super.setUp()
-        sut = MultiCastMock()
+	func testObserverCalled() {
+		givenObserving()
 
-    }
+		whenChanging()
+		whenChanging()
 
-    func testObserverCalled() {
-        givenObserving()
+		XCTAssertEqual(observer?.numberOfdidChangeCalls, 2)
+	}
 
-        whenChanging()
-        whenChanging()
+	func testObserverShouldOnlyGetAddedOnce() {
+		givenObserving()
 
-        XCTAssertEqual(observer?.numberOfdidChangeCalls, 2)
-    }
+		whenAddingObserverAgain()
 
-    func testObserverShouldOnlyGetAddedOnce() {
-        givenObserving()
+		XCTAssertEqual(sut.observers.count, 1)
+	}
 
-        whenAddingObserverAgain()
+	func testObserverRemoved() {
+		givenObserving()
 
-        XCTAssertEqual(sut.observers.count, 1)
-    }
+		whenRemovingObserver()
 
-    func testObserverRemoved() {
-        givenObserving()
+		XCTAssertTrue(sut.observers.isEmpty)
+	}
 
-        whenRemovingObserver()
+	func testCleanReleasedObserver() {
+		givenObserving()
 
-        XCTAssertTrue(sut.observers.isEmpty)
-    }
+		whenObserverIsReleased()
+		whenChanging()
 
-    func testCleanReleasedObserver() {
-        givenObserving()
+		XCTAssertTrue(sut.observers.isEmpty)
+	}
 
-        whenObserverIsReleased()
-        whenChanging()
+	func testDontCleanReleasedObserver() {
+		givenStrongObserving()
 
-        XCTAssertTrue(sut.observers.isEmpty)
-    }
+		whenObserverIsReleased()
+		whenChanging()
 
-    func testDontCleanReleasedObserver() {
-        givenStrongObserving()
+		XCTAssertFalse(sut.observers.isEmpty)
+	}
 
-        whenObserverIsReleased()
-        whenChanging()
+	func testShouldRemoveReleasedObserversOnAdd() {
+		givenObserving() // +1
 
-        XCTAssertFalse(sut.observers.isEmpty)
-    }
+		whenAddingObserver() // +1
+		whenAddingObserver() // +1
 
-    func testShouldRemoveReleasedObserversOnAdd() {
-        givenObserving() // +1
+		let needToHoldRef = whenAddingObserver() // -1 +1
 
-        whenAddingObserver() // +1
-        whenAddingObserver() // +1
+		XCTAssertEqual(sut.observers.count, 2)
+		XCTAssertTrue(sut.observers.contains(needToHoldRef))
+		XCTAssertTrue(sut.observers.contains(observer!))
+	}
 
-        let needToHoldRef = whenAddingObserver() // -1 +1
+	func testShouldRemoveReleasedObserversOnRemove() {
+		givenObserving() // +1
+		whenAddingObserver() // +1
+		whenAddingObserver() // +1
 
-        XCTAssertEqual(sut.observers.count, 2)
-        XCTAssertTrue(sut.observers.contains(needToHoldRef))
-        XCTAssertTrue(sut.observers.contains(observer!))
-    }
+		whenRemovingObserver()
 
-    func testShouldRemoveReleasedObserversOnRemove() {
-        givenObserving() // +1
-        whenAddingObserver() // +1
-        whenAddingObserver() // +1
+		XCTAssertEqual(sut.observers.count, 0)
+	}
 
-        whenRemovingObserver()
+	func testAddMultipleObservers() {
+		let obs1 = givenObserving()
+		let obs2 = givenObserving()
 
-        XCTAssertEqual(sut.observers.count, 0)
-    }
+		whenChanging()
 
-    func testAddMultipleObservers() {
-        let obs1 = givenObserving()
-        let obs2 = givenObserving()
+		XCTAssertEqual(obs1.numberOfdidChangeCalls, 1)
+		XCTAssertEqual(obs2.numberOfdidChangeCalls, 1)
+	}
 
-        whenChanging()
+	func testRemoveNonExistingObserverShouldBeIgnored() {
+		givenObserving()
 
-        XCTAssertEqual(obs1.numberOfdidChangeCalls, 1)
-        XCTAssertEqual(obs2.numberOfdidChangeCalls, 1)
-    }
+		let unknownObserver = MulticastObserverMock()
+		sut.remove(observer: unknownObserver)
 
-    func testRemoveNonExistingObserverShouldBeIgnored() {
-        givenObserving()
+		XCTAssertEqual(sut.observers.count, 1)
+	}
 
-        let unknownObserver = MulticastObserverMock()
-        sut.remove(observer: unknownObserver)
+	// MARK: Helper
 
-        XCTAssertEqual(sut.observers.count, 1)
-    }
+	@discardableResult
+	func givenObserving() -> MulticastObserverMock {
+		let observer = whenAddingObserver()
+		self.observer = observer
+		return observer
+	}
 
-    // Mark: Helper
+	@discardableResult
+	func givenStrongObserving() -> MulticastObserverMock {
+		sut.observers = MulticastDelegate<MultiCastMockObserver>(mode: .strong)
+		let observer = whenAddingObserver()
+		self.observer = observer
+		return observer
+	}
 
-    @discardableResult
-    func givenObserving() -> MulticastObserverMock {
-        let observer = whenAddingObserver()
-        self.observer = observer
-        return observer
-    }
+	func whenRemovingObserver() {
+		guard let observer = observer else {
+			XCTFail("`observer should not be null`")
+			return
+		}
+		sut.remove(observer: observer)
+	}
 
-    @discardableResult
-    func givenStrongObserving() -> MulticastObserverMock {
-        sut.observers = MulticastDelegate<MultiCastMockObserver>(mode: .strong)
-        let observer = whenAddingObserver()
-        self.observer = observer
-        return observer
-    }
+	func whenChanging() {
+		sut.invokeObservers()
+	}
 
-    func whenRemovingObserver() {
-        guard let observer = observer else {
-            XCTFail()
-            return
-        }
-        sut.remove(observer: observer)
-    }
+	func whenObserverIsReleased() {
+		observer = nil
+	}
 
-    func whenChanging() {
-        sut.invokeObservers()
-    }
+	@discardableResult
+	func whenAddingObserver() -> MulticastObserverMock {
+		let observer = MulticastObserverMock()
+		sut.add(observer: observer)
+		return observer
+	}
 
-    func whenObserverIsReleased() {
-        observer = nil
-    }
-
-    @discardableResult
-    func whenAddingObserver() -> MulticastObserverMock {
-        let observer = MulticastObserverMock()
-        sut.add(observer: observer)
-        return observer
-    }
-
-    func whenAddingObserverAgain() {
-        guard let observer = observer else {
-            XCTFail()
-            return
-        }
-        sut.add(observer: observer)
-    }
-
+	func whenAddingObserverAgain() {
+		guard let observer = observer else {
+			XCTFail("`observer should not be null`")
+			return
+		}
+		sut.add(observer: observer)
+	}
 }
