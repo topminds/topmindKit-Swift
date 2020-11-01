@@ -1,9 +1,6 @@
 //
-//  Signal.swift
-//  topmindKit
-//
-//  Created by Martin Gratzer on 04/06/2017.
-//  Copyright © 2017 topmind mobile app solutions. All rights reserved.
+// Copyright (c) topmind GmbH and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
 import Foundation

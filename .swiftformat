@@ -1,6 +1,7 @@
 --allman false
 --indent tab
 --guardelse same-line
+--header "\nCopyright (c) topmind GmbH and contributors. All rights reserved.\nLicensed under the MIT license. See LICENSE file in the project root for details.\n"
 
 --enable elseOnSameLine
 --disable trailingCommas,organizeDeclarations,wrapMultilineStatementBraces
