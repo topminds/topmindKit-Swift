@@ -3,8 +3,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import Combine
 import Foundation
+#if canImport(Combine)
+	import Combine
+#endif
 
 public enum HttpApiError: Error, LocalizedError {
 	case encodingError(Error)
@@ -67,33 +69,35 @@ public protocol HttpApiClient: AnyObject {
 	var delegate: HttpApiClientDelegate? { get }
 }
 
-@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-extension HttpApiClient {
-	func send(call: HttpCall) -> AnyPublisher<Data, HttpApiError> {
-		send(request: call.request)
-	}
+#if canImport(Combine)
+	@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+	extension HttpApiClient {
+		func send(call: HttpCall) -> AnyPublisher<Data, HttpApiError> {
+			send(request: call.request)
+		}
 
-	func send(request: URLRequest) -> AnyPublisher<Data, HttpApiError> {
-		var mutableRequest = request
-		delegate?.httpApiClient(self, willSend: &mutableRequest)
+		func send(request: URLRequest) -> AnyPublisher<Data, HttpApiError> {
+			var mutableRequest = request
+			delegate?.httpApiClient(self, willSend: &mutableRequest)
 
-		return session
-			.dataTaskPublisher(for: request)
-			.mapError { HttpApiError.urlError($0) }
-			.tryMap { data, response in
-				guard let httpResponse = response as? HTTPURLResponse else {
-					throw HttpApiError.unknown(nil)
+			return session
+				.dataTaskPublisher(for: request)
+				.mapError { HttpApiError.urlError($0) }
+				.tryMap { data, response in
+					guard let httpResponse = response as? HTTPURLResponse else {
+						throw HttpApiError.unknown(nil)
+					}
+
+					guard 200 ..< 300 ~= httpResponse.statusCode else {
+						throw HttpApiError.apiError(code: httpResponse.statusCode,
+						                            data: data,
+						                            reason: HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))
+					}
+
+					return data
 				}
-
-				guard 200 ..< 300 ~= httpResponse.statusCode else {
-					throw HttpApiError.apiError(code: httpResponse.statusCode,
-					                            data: data,
-					                            reason: HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))
-				}
-
-				return data
-			}
-			.mapError { ($0 as? HttpApiError) ?? HttpApiError.unknown($0) }
-			.eraseToAnyPublisher()
+				.mapError { ($0 as? HttpApiError) ?? HttpApiError.unknown($0) }
+				.eraseToAnyPublisher()
+		}
 	}
-}
+#endif
