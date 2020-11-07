@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "CoreMind"
-    s.version      = "1.1.0"
+    s.version      = "1.2.1"
     s.summary      = "topmindKit framework"
     s.homepage     = "https://www.topmind.eu"
     s.license      = "All rights reserved topmind GmbH"
