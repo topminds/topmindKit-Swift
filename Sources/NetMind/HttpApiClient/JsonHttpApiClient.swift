@@ -52,18 +52,20 @@ private extension URLSessionConfiguration {
 	}
 }
 
-@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-private extension JSONEncoder {
-	func encode<T: Encodable>(_ value: T) -> Future<Data, HttpApiError> {
-		Future<Data, HttpApiError> {
-			do {
-				$0(.success(try self.encode(value)))
-			} catch {
-				$0(.failure(HttpApiError.encodingError(error)))
+#if canImport(Combine)
+	@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+	private extension JSONEncoder {
+		func encode<T: Encodable>(_ value: T) -> Future<Data, HttpApiError> {
+			Future<Data, HttpApiError> {
+				do {
+					$0(.success(try self.encode(value)))
+				} catch {
+					$0(.failure(HttpApiError.encodingError(error)))
+				}
 			}
 		}
 	}
-}
+#endif
 
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private extension JSONDecoder {
