@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased] 
+
+## 1.3.0 - 2021-04-07
 - Remove Result<T> type alias to Swift.Result<T, Error> (#12)
 
 ## 1.2.1 - 2020-11-07
