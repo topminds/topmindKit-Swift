@@ -8,18 +8,9 @@ import Foundation
 /// Conform String to Error in order to use it for simpler error throwing
 extension String: Error {}
 
-/// The Result type either represents a success - which has an associated value
-/// representing the successful result - or a falure - whith an associated error.
-/// See http://alisoftware.github.io/swift/async/error/2016/02/06/async-errors/
-///
-/// - success: represents the successful result
-/// - failure: represents a failure with an associated error
-// @available(*, deprecated, message: "Please use `Swift.Result`")
-public typealias Result<T> = Swift.Result<T, Error>
-
 // MARK: - Non throwing values
 
-public extension Swift.Result {
+public extension Result {
 	/// Unwraps a Result without throwing
 	///
 	/// - Returns: nil in case of an error, the value otherwise
