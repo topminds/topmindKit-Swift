@@ -12,7 +12,7 @@ public final class ContextObserver<T: NSManagedObject> {
 
 	fileprivate let context: NSManagedObjectContext
 	fileprivate let persistentStoreCoordinator: NSPersistentStoreCoordinator?
-	fileprivate let masterPredicate: NSPredicate
+	fileprivate let mainPredicate: NSPredicate
 	fileprivate let didChange: ChangedEvent
 	fileprivate let keys = [NSInsertedObjectsKey, NSDeletedObjectsKey, NSUpdatedObjectsKey]
 	fileprivate var enabled = false
@@ -26,9 +26,9 @@ public final class ContextObserver<T: NSManagedObject> {
 
 		let entityPredicate = NSPredicate(format: "entity = %@", entity)
 		if let predicate = predicate {
-			masterPredicate = entityPredicate + predicate
+			mainPredicate = entityPredicate + predicate
 		} else {
-			masterPredicate = entityPredicate
+			mainPredicate = entityPredicate
 		}
 
 		didChange = onChange
@@ -65,7 +65,7 @@ public final class ContextObserver<T: NSManagedObject> {
 
 		var result = [String: [Entity]]()
 		keys.forEach {
-			if let set = filteredSetForKey(userInfo, key: $0, predicate: masterPredicate) {
+			if let set = filteredSetForKey(userInfo, key: $0, predicate: mainPredicate) {
 				result[$0] = set
 			}
 		}
