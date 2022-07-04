@@ -10,9 +10,7 @@ import XCTest
 class ContextObserverTests: CoreDataTests {
 	var tomPredicate = NSPredicate(format: "name = %@", "Tom")
 	var jerryPredicate = NSPredicate(format: "name = %@", "Jerry")
-	lazy var entity: NSEntityDescription = {
-		NSEntityDescription.entity(forEntityName: "Kitten", in: self.stack!.mainContext)!
-	}()
+	lazy var entity: NSEntityDescription = NSEntityDescription.entity(forEntityName: "Kitten", in: self.stack!.mainContext)!
 
 	// MARK: - TESTS
 

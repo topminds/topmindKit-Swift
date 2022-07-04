@@ -9,9 +9,7 @@ import XCTest
 
 class CoreDataStackTests: XCTestCase {
 	var stack: CoreDataStack?
-	lazy var modelUrl: URL? = {
-		Bundle(for: CoreDataTests.self).url(forResource: "Model", withExtension: "momd")
-	}()
+	lazy var modelUrl: URL? = Bundle(for: CoreDataTests.self).url(forResource: "Model", withExtension: "momd")
 
 	// MARK: - SETUP
 

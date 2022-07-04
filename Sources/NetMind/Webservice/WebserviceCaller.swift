@@ -82,23 +82,23 @@ public extension WebserviceCaller {
 
 extension WebserviceCaller {
 	internal func request(for request: WebserviceRequest, serviceUrl: URL, headers: [String: String], completion: @escaping (Result<URLRequest, Error>) -> Void) {
-		if let delegate = self.delegate {
+		if let delegate = delegate {
 			delegate.webserviceCaller(self, didRequestHeaders: request) {
 				[weak self] delegateHeaders in
 
-				guard let self = self else { return }
+					guard let self = self else { return }
 
-				let url = try? request.url(for: serviceUrl).get()
-				var requestHeaders = headers
-				for (key, value) in delegateHeaders ?? [:] {
-					if requestHeaders[key] == nil {
-						requestHeaders[key] = value
-					} else {
-						debugPrint("Global \(key) value will be overwritten by request specific value for call to `\(String(describing: url))`.")
+					let url = try? request.url(for: serviceUrl).get()
+					var requestHeaders = headers
+					for (key, value) in delegateHeaders ?? [:] {
+						if requestHeaders[key] == nil {
+							requestHeaders[key] = value
+						} else {
+							debugPrint("Global \(key) value will be overwritten by request specific value for call to `\(String(describing: url))`.")
+						}
 					}
-				}
 
-				completion(self.request(for: request, serviceUrl: serviceUrl, headers: requestHeaders))
+					completion(self.request(for: request, serviceUrl: serviceUrl, headers: requestHeaders))
 			}
 		} else {
 			completion(self.request(for: request, serviceUrl: serviceUrl, headers: headers))

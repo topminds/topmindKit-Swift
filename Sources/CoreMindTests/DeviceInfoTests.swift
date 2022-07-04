@@ -15,11 +15,11 @@ final class DeviceInfoTests: XCTestCase {
 	}
 
 	func testModel() {
-        #if arch(arm64)
-		XCTAssertEqual(sut.model, "arm64")
-        #else
-        XCTAssertEqual(sut.model, "x86_64")
-        #endif
+		#if arch(arm64)
+			XCTAssertEqual(sut.model, "arm64")
+		#else
+			XCTAssertEqual(sut.model, "x86_64")
+		#endif
 	}
 
 	func testOs() {
