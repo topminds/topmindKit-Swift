@@ -19,11 +19,11 @@ public extension Webservice {
 		send(method: method, headers: headers) {
 			(response: Result<WebserviceResponse, Error>) in
 
-			let result: Result<T, Error> = response.flatMap {
-				response in method.decode(response: response, with: self.caller.format)
-			}
+				let result: Result<T, Error> = response.flatMap {
+					response in method.decode(response: response, with: self.caller.format)
+				}
 
-			completion(result)
+				completion(result)
 		}
 	}
 
@@ -34,25 +34,25 @@ public extension Webservice {
 		caller.request(for: method, serviceUrl: serviceUrl, headers: headers ?? [:]) {
 			[weak caller] in
 
-			guard let caller = caller else { return }
+				guard let caller = caller else { return }
 
-			switch $0 {
-			case let .success(request):
-				caller.sendDataTask(request: request) {
-					let result = $0.flatMap(errorHandler)
+				switch $0 {
+				case let .success(request):
+					caller.sendDataTask(request: request) {
+						let result = $0.flatMap(errorHandler)
 
-					#if DEBUG
-						if case let .failure(error) = result {
-							debugPrint("\(String(describing: request.httpMethod)) request to \(String(describing: request.url)) failed with \(error).")
-						}
-					#endif
+						#if DEBUG
+							if case let .failure(error) = result {
+								debugPrint("\(String(describing: request.httpMethod)) request to \(String(describing: request.url)) failed with \(error).")
+							}
+						#endif
 
-					completion(result)
+						completion(result)
+					}
+
+				case let .failure(error):
+					completion(.failure(error))
 				}
-
-			case let .failure(error):
-				completion(.failure(error))
-			}
 		}
 	}
 }

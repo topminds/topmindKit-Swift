@@ -16,8 +16,8 @@ final class SystemNetworkIndicatorTests: XCTestCase {
 
 		SystemNetworkIndicator.showIndicatorCallback = {
 			[weak self] in
-			self?.callbackState = $0
-			self?.didCallCallback += 1
+				self?.callbackState = $0
+				self?.didCallCallback += 1
 		}
 	}
 
@@ -93,7 +93,7 @@ final class SystemNetworkIndicatorTests: XCTestCase {
 
 	func givenActivities(count: ActivityCount) {
 		let range = (0 ..< count)
-		let check = range.enumerated().map { ($0.offset + 1) }
+		let check = range.enumerated().map { $0.offset + 1 }
 		let counts = range.map { _ in SystemNetworkIndicator.startAnimating() }
 		XCTAssertEqual(check, counts)
 	}

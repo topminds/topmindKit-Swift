@@ -9,7 +9,7 @@ public enum ResultQueue {
 	case any, main, specific(DispatchQueue)
 
 	public func execute(block: @escaping () -> Void) {
-		guard let queue = self.queue else {
+		guard let queue = queue else {
 			block()
 			return
 		}

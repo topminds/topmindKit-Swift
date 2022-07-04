@@ -36,11 +36,11 @@ public final class ManagedObjectObserver {
 		observer = NotificationCenter.default.addObserver(forName: .NSManagedObjectContextObjectsDidChange, object: context, queue: nil) {
 			[weak self] in
 
-			guard let self = self, let notification = ObjectsDidChangeNotification(notification: $0),
-			      let changeType = ManagedObjectObserver.changeType(of: self.object, for: notification) else {
-				return
-			}
-			self.onChange(changeType)
+				guard let self = self, let notification = ObjectsDidChangeNotification(notification: $0),
+				      let changeType = ManagedObjectObserver.changeType(of: self.object, for: notification) else {
+					return
+				}
+				self.onChange(changeType)
 		}
 	}
 

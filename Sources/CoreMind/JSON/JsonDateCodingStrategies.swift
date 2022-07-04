@@ -7,7 +7,7 @@ import Foundation
 
 public extension JSONDecoder.DateDecodingStrategy {
 	static func keySpecific(_ formatterForKey: @escaping (CodingKey) throws -> DateFormatter?) -> JSONDecoder.DateDecodingStrategy {
-		.custom { (decoder) -> Date in
+		.custom { decoder -> Date in
 			guard let codingKey = decoder.codingPath.last else {
 				throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "No Coding Path Found"))
 			}

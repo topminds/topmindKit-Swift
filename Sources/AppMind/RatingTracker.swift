@@ -49,7 +49,7 @@ public class RatingTracker {
 }
 
 public extension RatingTracker {
-	fileprivate func trackFirstAppLaunch() {
+	private func trackFirstAppLaunch() {
 		if ratingStore[.firstAppLaunch] == nil {
 			ratingStore[.firstAppLaunch] = Date().timeIntervalSince1970
 		}

@@ -20,50 +20,50 @@ public extension Logger {
 }
 
 public struct ConsoleLogger: Logger {
-    private let osLog: OSLog
-    
-    public init(subsystem: String? = Bundle.main.bundleIdentifier, category: String? = nil) {
-        osLog = OSLog(
-            subsystem: subsystem ?? "",
-            category: category ?? ""
-        )
-    }
-    
-	public func log(message: String, tag: Log.Tag?, level: Log.Level) {
-        let formattedMessage = formatLogMessage(message: message, tag: tag)
-        
-        switch level {
-            case .error:
-                logError(formattedMessage)
-                
-            case .info:
-                logInfo(formattedMessage)
-                
-            case .verbose:
-                logVerbose(formattedMessage)
-                
-            case .warning:
-                logWarning(formattedMessage)
-        }
+	private let osLog: OSLog
+
+	public init(subsystem: String? = Bundle.main.bundleIdentifier, category: String? = nil) {
+		osLog = OSLog(
+			subsystem: subsystem ?? "",
+			category: category ?? ""
+		)
 	}
 
-    public func info(_ message: String) {
-        log(message, type: .info)
-    }
+	public func log(message: String, tag: Log.Tag?, level: Log.Level) {
+		let formattedMessage = formatLogMessage(message: message, tag: tag)
 
-    public func debug(_ message: String) {
-        log(message, type: .debug)
-    }
+		switch level {
+		case .error:
+			logError(formattedMessage)
 
-    public func error(_ message: String) {
-        log(message, type: .error)
-    }
+		case .info:
+			logInfo(formattedMessage)
 
-    public func fault(_ message: String) {
-        log(message, type: .fault)
-    }
+		case .verbose:
+			logVerbose(formattedMessage)
 
-    private func log(_ message: String, type: OSLogType) {
-        os_log("%{public}@", log: osLog, type: type, message)
-    }
+		case .warning:
+			logWarning(formattedMessage)
+		}
+	}
+
+	public func info(_ message: String) {
+		log(message, type: .info)
+	}
+
+	public func debug(_ message: String) {
+		log(message, type: .debug)
+	}
+
+	public func error(_ message: String) {
+		log(message, type: .error)
+	}
+
+	public func fault(_ message: String) {
+		log(message, type: .fault)
+	}
+
+	private func log(_ message: String, type: OSLogType) {
+		os_log("%{public}@", log: osLog, type: type, message)
+	}
 }

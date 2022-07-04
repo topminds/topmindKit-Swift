@@ -44,7 +44,7 @@ public extension NSPredicate {
 		return caseInsensitiveSearch(term as AnyObject, inKeyPaths: paths, operation: .contains)
 	}
 
-	fileprivate class func caseInsensitiveSearch(_ term: AnyObject, inKeyPaths: [String], operation: NSComparisonPredicate.Operator) -> NSPredicate {
+	private class func caseInsensitiveSearch(_ term: AnyObject, inKeyPaths: [String], operation: NSComparisonPredicate.Operator) -> NSPredicate {
 		let valueExpression = NSExpression(forConstantValue: term)
 
 		var predicates = [NSPredicate]()
