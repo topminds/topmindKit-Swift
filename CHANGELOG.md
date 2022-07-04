@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased] 
+-- CoreMind: Use `OSLog` within `ConsoleLogger` (#13)
 
 ## 1.3.0 - 2021-04-07
 - Remove Result<T> type alias to Swift.Result<T, Error> (#12)
