@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
 	name: "topmindKit",
 	platforms: [
-		.macOS(.v10_12), .iOS(.v10), .watchOS(.v4), .tvOS(.v10)
+		.macOS(.v10_12), .iOS(.v11), .watchOS(.v4), .tvOS(.v10)
 	],
 	products: [
 		.library(name: "AppMind", targets: ["AppMind"]),
