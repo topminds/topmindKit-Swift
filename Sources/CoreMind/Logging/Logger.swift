@@ -34,16 +34,16 @@ public struct ConsoleLogger: Logger {
 
 		switch level {
 		case .error:
-			logError(formattedMessage)
+			error(formattedMessage)
 
 		case .info:
-			logInfo(formattedMessage)
+			info(formattedMessage)
 
 		case .verbose:
-			logVerbose(formattedMessage)
+			debug(formattedMessage)
 
 		case .warning:
-			logWarning(formattedMessage)
+			fault(formattedMessage)
 		}
 	}
 
