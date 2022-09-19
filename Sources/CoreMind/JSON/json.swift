@@ -8,9 +8,6 @@ import Foundation
 public typealias JSONArray = [Any]
 public typealias JSONObject = [String: Any]
 
-@available(*, deprecated, message: "use JSONObject")
-public typealias JSONDictionary = JSONObject
-
 public enum JSON {
 	case array(JSONArray)
 	case object(JSONObject)
