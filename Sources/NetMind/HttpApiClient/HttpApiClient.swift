@@ -3,97 +3,53 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-import Foundation
 import Combine
+import Foundation
 
-public enum HttpApiError: Error, LocalizedError {
-	case encodingError(Error)
-	case decodingError(Error)
-	case urlError(URLError)
-	case unknown(Error?)
-	case apiError(code: Int, data: Data, reason: String)
-
-	public var errorDescription: String? {
-		switch self {
-		case let .unknown(error): return error?.localizedDescription ?? "Unknown error"
-		case let .apiError(code, _, reason): return "\(code) \(reason)"
-		case let .encodingError(error): return error.localizedDescription
-		case let .decodingError(error): return error.localizedDescription
-		case let .urlError(error): return error.localizedDescription
-		}
-	}
+protocol HttpApiClientDelegate: AnyObject {
+	func httpApiClient(_ client: HttpApiClient, willSend request: URLRequest) async throws -> URLRequest
+	func httpApiClient(_ client: HttpApiClient, didFail request: URLRequest, with error: HttpApiError) -> Error
 }
 
-internal enum HttpCall {
-	case get(URL)
-	case post(URL, Data)
-
-	var method: String {
-		switch self {
-		case .get: return "GET"
-		case .post: return "POST"
-		}
-	}
-
-	var request: URLRequest {
-		switch self {
-		case let .get(url):
-			var request = URLRequest(url: url)
-			request.httpMethod = method
-			return request
-
-		case let .post(url, body):
-			var request = URLRequest(url: url)
-			request.httpMethod = method
-			request.httpBody = body
-			return request
-		}
-	}
-}
-
-@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-public protocol HttpApiClientDelegate: AnyObject {
-	func httpApiClient(_ client: HttpApiClient, willSend request: inout URLRequest)
-	//    func httpApiClient(_ client: HttpApiClient, shouldSend request: URLRequest) -> Bool
-	//    func httpApiClient(_ client: HttpApiClient, didCompleteRawTaskForRequest request: URLRequest,
-	//                       withData data: Data?, response: URLResponse?, error: Error?)
-	//    func httpApiClient(_ client: HttpApiClient, receivedError error: Error, for request: URLRequest,
-	//                       response: URLResponse?, retryHandler: @escaping (_ shouldRetry: Bool) -> Void)
-}
-
-@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-public protocol HttpApiClient: AnyObject {
-	var session: URLSession { get }
+protocol HttpApiClient: AnyObject {
 	var delegate: HttpApiClientDelegate? { get }
+	var session: URLSession { get }
 }
 
-@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension HttpApiClient {
-	func send(call: HttpCall) -> AnyPublisher<Data, HttpApiError> {
-		send(request: call.request)
+	func data(for request: URLRequest, delegate: URLSessionTaskDelegate? = nil) async throws -> Data {
+		if #available(iOS 15.0, *) {
+			return try Self.handleUrlSessionResult(
+				try await session.data(
+					for: await self.delegate?.httpApiClient(self, willSend: request) ?? request,
+					delegate: delegate
+				)
+			)
+		} else {
+			return try Self.handleUrlSessionResult(
+				try await session.data(
+					for: await self.delegate?.httpApiClient(self, willSend: request) ?? request
+				)
+			)
+		}
 	}
+}
 
-	func send(request: URLRequest) -> AnyPublisher<Data, HttpApiError> {
-		var mutableRequest = request
-		delegate?.httpApiClient(self, willSend: &mutableRequest)
+private extension HttpApiClient {
+	static func handleUrlSessionResult(_ result: (data: Data, response: URLResponse)) throws -> Data {
+		guard let httpResponse = result.response as? HTTPURLResponse else {
+			throw HttpApiError.unknown(nil)
+		}
 
-		return session
-			.dataTaskPublisher(for: request)
-			.mapError { HttpApiError.urlError($0) }
-			.tryMap { data, response in
-				guard let httpResponse = response as? HTTPURLResponse else {
-					throw HttpApiError.unknown(nil)
-				}
+		guard 200 ..< 300 ~= httpResponse.statusCode else {
+			throw HttpApiError.apiError(
+				code: httpResponse.statusCode,
+				data: result.data,
+				reason: HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode),
+				headers: httpResponse.allHeaderFields
+			)
+		}
 
-				guard 200 ..< 300 ~= httpResponse.statusCode else {
-					throw HttpApiError.apiError(code: httpResponse.statusCode,
-												data: data,
-												reason: HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))
-				}
-
-				return data
-			}
-			.mapError { ($0 as? HttpApiError) ?? HttpApiError.unknown($0) }
-			.eraseToAnyPublisher()
+		return result.data
 	}
 }

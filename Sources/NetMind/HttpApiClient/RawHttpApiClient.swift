@@ -3,29 +3,54 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
+import Combine
 import Foundation
-#if canImport(Combine)
-	import Combine
 
-	@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-	public final class RawHttpApiClient: HttpApiClient {
-		public let session: URLSession
-		public weak var delegate: HttpApiClientDelegate?
+final class RawHttpApiClient: HttpApiClient {
+	let session: URLSession
+	weak var delegate: HttpApiClientDelegate?
 
-		public init() {
-			session = URLSession(configuration: .ephemeral)
-		}
+	init() {
+		session = URLSession(configuration: .ephemeral)
+	}
 
-		public init(configuration: URLSessionConfiguration) {
-			session = URLSession(configuration: configuration)
-		}
+	init(configuration: URLSessionConfiguration, delegate: HttpApiClientDelegate? = nil) {
+		session = URLSession(configuration: configuration)
+		self.delegate = delegate
+	}
 
-		public func get(url: URL) -> AnyPublisher<Data, HttpApiError> {
-			send(call: .get(url))
-		}
+	func get(url: URL, delegate: URLSessionTaskDelegate? = nil) async throws -> Data {
+		try await result(for: .get(url), delegate: delegate)
+	}
 
-		public func post(url: URL, data: Data) -> AnyPublisher<Data, HttpApiError> {
-			send(call: .post(url, data))
+	func post(url: URL, body: Data?, delegate: URLSessionTaskDelegate? = nil) async throws -> Data {
+		try await result(for: .post(url, body), delegate: delegate)
+	}
+
+	func put(url: URL, body: Data?, delegate: URLSessionTaskDelegate? = nil) async throws -> Data {
+		try await result(for: .put(url, body), delegate: delegate)
+	}
+
+	func patch(url: URL, body: Data?, delegate: URLSessionTaskDelegate? = nil) async throws -> Data {
+		try await result(for: .patch(url, body), delegate: delegate)
+	}
+
+	func delete(url: URL, delegate: URLSessionTaskDelegate? = nil) async throws -> Data {
+		try await result(for: .delete(url), delegate: delegate)
+	}
+
+	private func result(for call: HttpCall, delegate: URLSessionTaskDelegate?) async throws -> Data {
+		let request = call.request
+		do {
+			return try await data(for: request, delegate: delegate)
+		} catch let error as HttpApiError {
+			if let error = self.delegate?.httpApiClient(self, didFail: request, with: error) {
+				throw error
+			} else {
+				throw error
+			}
+		} catch {
+			throw error
 		}
 	}
-#endif
+}

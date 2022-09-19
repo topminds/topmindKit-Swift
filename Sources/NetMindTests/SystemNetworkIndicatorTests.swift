@@ -16,8 +16,8 @@ final class SystemNetworkIndicatorTests: XCTestCase {
 
 		SystemNetworkIndicator.showIndicatorCallback = {
 			[weak self] in
-				self?.callbackState = $0
-				self?.didCallCallback += 1
+			self?.callbackState = $0
+			self?.didCallCallback += 1
 		}
 	}
 
