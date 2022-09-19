@@ -5,6 +5,7 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Please use `HttpApiClient`")
 public enum RestResourceRequest<T: Codable, U: Equatable>: WebserviceRequest {
 	case get(id: U)
 	case create(T)

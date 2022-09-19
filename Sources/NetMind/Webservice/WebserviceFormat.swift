@@ -5,6 +5,7 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Please use `HttpApiClient`")
 public protocol WebserviceFormat {
 	static var httpHeaders: [String: String] { get }
 

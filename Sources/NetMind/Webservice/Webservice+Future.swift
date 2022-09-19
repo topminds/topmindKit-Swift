@@ -7,7 +7,7 @@ import Foundation
 
 #if canImport(CoreMind)
 	import CoreMind
-
+    @available(*, deprecated, message: "Please use `HttpApiClient`")
 	public extension Webservice {
 		func send(method: Method, headers: [String: String]) -> Future<WebserviceResponse> {
 			Future<WebserviceResponse> {

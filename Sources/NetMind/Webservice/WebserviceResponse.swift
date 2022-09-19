@@ -5,6 +5,7 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Please use `HttpApiClient`")
 public struct WebserviceResponse {
 	public let reqeustUrl: URL?
 	public let statusCode: Int

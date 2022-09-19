@@ -20,6 +20,7 @@ public enum WebserviceRequestError: Error {
 	}
 }
 
+@available(*, deprecated, message: "Please use `HttpApiClient`")
 public protocol WebserviceRequest {
 	/// HTTP query parameters for the request
 	var queryParameters: [String: String] { get }

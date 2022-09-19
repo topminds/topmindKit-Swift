@@ -8,12 +8,14 @@ import Foundation
 @available(*, deprecated, message: "use Webservice")
 public typealias Webserivce = Webservice
 
+@available(*, deprecated, message: "Please use `HttpApiClient`")
 public protocol Webservice {
 	associatedtype Method: WebserviceRequest
 	var servicePath: String { get }
 	var caller: WebserviceCaller { get }
 }
 
+@available(*, deprecated, message: "Please use `HttpApiClient`")
 public extension Webservice {
 	func send<T: Decodable>(method: Method, headers: [String: String]?, completion: @escaping (Result<T, Error>) -> Void) {
 		send(method: method, headers: headers) {

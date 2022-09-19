@@ -5,6 +5,7 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Please use `HttpApiClient`")
 public protocol WebserviceCallerDelegate: AnyObject {
 	func webserviceCaller(_ caller: WebserviceCaller, didRequestHeaders for: WebserviceRequest, completion: @escaping ([String: String]?) -> Void)
 }
@@ -23,6 +24,7 @@ public enum WebserviceCallerError: Error {
  A webservice caller represents a web API server or endpint.
  It's injected into web services to ease switching between servers and endpoints.
  */
+@available(*, deprecated, message: "Please use `HttpApiClient`")
 public protocol WebserviceCaller: AnyObject {
 	var baseUrl: URL { get }
 	var session: URLSession { get }

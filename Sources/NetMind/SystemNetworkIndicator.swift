@@ -7,6 +7,7 @@ import Foundation
 
 public typealias ActivityCount = Int
 
+@available(*, deprecated)
 public protocol NetworkActivityIndicator {
 	@discardableResult
 	static func startAnimating() -> ActivityCount
@@ -16,6 +17,7 @@ public protocol NetworkActivityIndicator {
 	static func reset() -> ActivityCount
 }
 
+@available(*, deprecated)
 public struct SystemNetworkIndicator: NetworkActivityIndicator {
 	public private(set) static var activityCounter: ActivityCount = 0
 	/// Set this callback

@@ -5,6 +5,7 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Please use `HttpApiClient`")
 public struct JsonWebserviceFormat: WebserviceFormat {
 	public static let httpHeaders = [
 		"Accept": "application/json",
