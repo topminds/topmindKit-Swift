@@ -22,6 +22,7 @@ public struct RequestConfig {
 	}
 }
 
+@available(*, deprecated, message: "use `CoreDataEntityRepository`")
 public struct CoreDataFetcher<T: NSManagedObject> {
 	public typealias Entity = T
 

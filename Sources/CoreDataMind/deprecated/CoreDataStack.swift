@@ -23,6 +23,7 @@ public extension NSManagedObjectContext {
 public typealias CoreDataInitCompletion = (Result<NSManagedObjectContext, Error>) -> Void
 
 /// Object holiding and handling the complete core data stack
+@available(*, deprecated, message: "use `PersistenceStore`")
 public final class CoreDataStack: CoreDataTrait {
 	/**
 	     NSPersistentStore type used for the core data stack.
