@@ -9,7 +9,7 @@
 
 	extension Keychain {
 		func clean() throws {
-			let items = try self.items(account: nil) ?? []
+			let items = try items(account: nil) ?? []
 			for item in items {
 				guard let account = item[kSecAttrAccount as String] as? String else {
 					continue
